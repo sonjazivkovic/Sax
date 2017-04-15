@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Sax Music Player</string>
-    <string name="initial_text">This is the very first begining of our Sax Music Player</string>
+    <string name="welcome_text">Welcome to the Sax Music Player!</string>
+    <string name="btnLoadAllSongs">Load all songs</string>
+    <string name="loadAllSongsPlaceholder">This is a place where user can see that all the songs are loaded.</string>
+    <string name="loadAllSongsLabel">Load all songs</string>
+    <string name="btnChoosePlaylist">Choose a playlist</string>
+    <string name="choosePlaylistPlaceholder">This is a place where user can see all the playlists and also create new playlists, delete existing ones. And so on.</string>
+    <string name="choosePlaylistLabel">Choose a playlist</string>
 </resources>

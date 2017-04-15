@@ -25,7 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".activities.LoadAllSongsActivity"
+            android:label="@string/loadAllSongsLabel">
+        </activity>
+        <activity android:name=".activities.ChoosePlaylistActivity"
+            android:label="@string/choosePlaylistLabel"></activity>
     </application>
 
 </manifest>
