@@ -7,4 +7,12 @@
     <string name="btnChoosePlaylist">Choose a playlist</string>
     <string name="choosePlaylistPlaceholder">This is a place where user can see all the playlists and also create new playlists, delete existing ones. And so on.</string>
     <string name="choosePlaylistLabel">Choose a playlist</string>
+    <string name="drawer_open">Drawer open</string>
+    <string name="drawer_close">Drawer close</string>
+    <string name="drawer_opened">Drawer opened</string>
+    <string name="drawer_closed">Drawer closed</string>
+    <string name="all_songs">All songs</string>
+    <string name="default_playlist">Default playlist</string>
+    <string name="office_playlist_placeholder">Office playlist</string>
+    <string name="party_playlist">Party playlist</string>
 </resources>
