@@ -5,7 +5,9 @@ import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,7 +16,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.buca.saxmusicplayer.activities.ChoosePlaylistActivity;
+import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
 import com.example.buca.saxmusicplayer.activities.LoadAllSongsActivity;
+import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
         menuItems = new String[] { getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.office_playlist_placeholder) };
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuItems));
@@ -39,13 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, getString(R.string.drawer_closed), Toast.LENGTH_SHORT).show();
             }
             public void onDrawerOpened(View view) {
-                super.onDrawerClosed(view);
+                super.onDrawerOpened(view);
                 Toast.makeText(MainActivity.this, getString(R.string.drawer_opened), Toast.LENGTH_SHORT).show();
             }
         };
-        drawerLayout.setDrawerListener(drawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        drawerLayout.addDrawerListener(drawerToggle);
+
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Button loadAllButton = (Button) findViewById(R.id.loadAllButton);
         loadAllButton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +91,26 @@ public class MainActivity extends AppCompatActivity {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        switch(item.getItemId()){
+            case R.id.action_lyrics:
+                Intent lyricsIntent = new Intent(MainActivity.this, LyricsActivity.class);
+                startActivity(lyricsIntent);
+                return true;
+            case R.id.action_rating_details:
+                Intent detailsIntent = new Intent(MainActivity.this, DetailsAndRatingActivity.class);
+                startActivity(detailsIntent);
+                return true;
+            case R.id.action_settings:
+                Toast.makeText(MainActivity.this, "Settings Opened", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return true;
     }
 }
