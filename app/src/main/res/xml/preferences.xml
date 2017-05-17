@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="language_preference"
+        android:title="@string/language_preference"
+        android:summary="@string/language_summary"
+        android:dialogTitle="@string/language_preference"
+        android:entries="@array/language_entries"
+        android:entryValues="@array/language_entry_values" />
+
+    <ListPreference
+        android:key="default_playlist_preference"
+        android:title="@string/default_playlist_preference"
+        android:summary="@string/default_playlist_summary"
+        android:dialogTitle="@string/default_playlist_preference"
+        android:entries="@array/default_playlist_entries"
+        android:entryValues="@array/default_playlist_entry_values" />
+
+    <Preference
+        android:key="scan_device"
+        android:title="@string/scan_device"
+        android:summary="@string/scan_device_summary" />
+
+    <Preference
+        android:key="open_playlist_manager"
+        android:title="@string/playlist_manager"
+        android:summary="@string/playlist_manager_summary">
+        <intent android:action="android.intent.action.VIEW"
+                android:targetPackage="com.example.buca.saxmusicplayer"
+                android:targetClass="com.example.buca.saxmusicplayer.activities.PlaylistManagerListActivity"/>
+    </Preference>
+
+</PreferenceScreen>

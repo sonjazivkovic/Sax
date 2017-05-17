@@ -18,4 +18,12 @@
     <string name="settings">Settings</string>
     <string name="lyrics">Lyrics</string>
     <string name="details_rating">Details And Rating</string>
+    <string name="language_preference">Language</string>
+    <string name="language_summary">Select Language</string>
+    <string name="default_playlist_preference">Default Playlist</string>
+    <string name="default_playlist_summary">Select Your Default Playlist</string>
+    <string name="scan_device">Scan Device For Songs</string>
+    <string name="scan_device_summary">Scan Your Device To Find New Songs</string>
+    <string name="playlist_manager">Playlist Manager</string>
+    <string name="playlist_manager_summary">Manage Your Playlists</string>
 </resources>

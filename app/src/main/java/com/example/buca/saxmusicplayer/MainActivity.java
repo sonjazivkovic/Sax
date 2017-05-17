@@ -11,14 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.buca.saxmusicplayer.activities.ChoosePlaylistActivity;
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
-import com.example.buca.saxmusicplayer.activities.LoadAllSongsActivity;
 import com.example.buca.saxmusicplayer.activities.LyricsActivity;
+import com.example.buca.saxmusicplayer.activities.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,35 +40,15 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                Toast.makeText(MainActivity.this, getString(R.string.drawer_closed), Toast.LENGTH_SHORT).show();
             }
             public void onDrawerOpened(View view) {
                 super.onDrawerOpened(view);
-                Toast.makeText(MainActivity.this, getString(R.string.drawer_opened), Toast.LENGTH_SHORT).show();
             }
         };
         drawerLayout.addDrawerListener(drawerToggle);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Button loadAllButton = (Button) findViewById(R.id.loadAllButton);
-        loadAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoadAllSongsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button btnChoosePlaylist = (Button)findViewById(R.id.btnChoosePlaylist);
-        btnChoosePlaylist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChoosePlaylistActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -101,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(detailsIntent);
                 return true;
             case R.id.action_settings:
-                Toast.makeText(MainActivity.this, "Settings Opened", Toast.LENGTH_SHORT).show();
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
         }
 

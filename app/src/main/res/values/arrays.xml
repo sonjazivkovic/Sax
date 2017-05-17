@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Srpski</item>
+    </string-array>
+    <string-array name="language_entry_values">
+        <item>en</item>
+        <item>rs</item>
+    </string-array>
+    <string-array name="default_playlist_entries">
+        <item>None</item>
+    </string-array>
+    <string-array name="default_playlist_entry_values">
+        <item>none</item>
+    </string-array>
+</resources>

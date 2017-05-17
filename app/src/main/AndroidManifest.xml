@@ -26,12 +26,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoadAllSongsActivity"
-            android:label="@string/loadAllSongsLabel"></activity>
-        <activity
-            android:name=".activities.ChoosePlaylistActivity"
-            android:label="@string/choosePlaylistLabel" />
-        <activity
             android:name=".activities.LyricsActivity"
             android:label="@string/lyrics"
             android:parentActivityName=".MainActivity">
@@ -49,6 +43,26 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.buca.saxmusicplayer.MainActivity"
+                />
+        </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.buca.saxmusicplayer.MainActivity"
+                />
+        </activity>
+        <activity
+            android:name=".activities.PlaylistManagerListActivity"
+            android:label="@string/playlist_manager"
+            android:parentActivityName=".activities.SettingsActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.buca.saxmusicplayer.activities.SettingsActivity"
                 />
         </activity>
     </application>
