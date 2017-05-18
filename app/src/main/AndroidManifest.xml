@@ -65,5 +65,15 @@
                 android:value="com.example.buca.saxmusicplayer.activities.SettingsActivity"
                 />
         </activity>
+        <activity
+            android:name=".activities.PlaylistManagerDetailsActivity"
+            android:label="@string/playlist_manager"
+            android:parentActivityName=".activities.PlaylistManagerListActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.buca.saxmusicplayer.activities.PlaylistManagerListActivity"
+                />
+        </activity>
     </application>
 </manifest>

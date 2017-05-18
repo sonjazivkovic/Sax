@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/playlist_manager_details_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/CustomPopupTheme"
+        />
+
+    <EditText
+        android:id="@+id/playlist_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Playlist Name" />
+
+    <Switch
+        android:id="@+id/show_in_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:text="Visible in Quick Launch" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_marginTop="50px"
+        android:background="@color/colorPrimary" />
+
+    <ListView
+        android:id="@+id/playlist_songs_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.75"/>
+
+    <Button
+        android:id="@+id/add_new_song_button"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.25"
+        android:text="Add New Song" />
+
+</LinearLayout>
