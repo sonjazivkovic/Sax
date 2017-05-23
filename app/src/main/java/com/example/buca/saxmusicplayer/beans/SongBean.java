@@ -1,5 +1,10 @@
 package com.example.buca.saxmusicplayer.beans;
 
+import android.database.Cursor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Stefan on 20/05/2017.
  */
@@ -74,5 +79,28 @@ public class SongBean {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public static SongBean createSongFromCursor(Cursor cursor){
+        SongBean retVal = new SongBean();
+        retVal.setId(cursor.getLong(0));
+        retVal.setPathToFile(cursor.getString(1));
+        retVal.setTitle(cursor.getString(2));
+        retVal.setArtist(cursor.getString(3));
+        retVal.setAlbum(cursor.getString(4));
+        retVal.setYear(cursor.getInt(5));
+        retVal.setGenre(cursor.getString(6));
+        return retVal;
+    }
+
+    public static List<SongBean> createSongsFromCursor(Cursor cursor){
+        List<SongBean> retVal = new ArrayList<>();
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            retVal.add(createSongFromCursor(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return retVal;
     }
 }
