@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,10 +27,12 @@
 
         <Button
             android:id="@+id/add_new_playlist_button"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="0.3"
-            android:text="Add New Playlist" />
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/addd"/>
 
     </LinearLayout>
 </LinearLayout>

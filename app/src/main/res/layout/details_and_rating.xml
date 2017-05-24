@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/details_rating_toolbar"
@@ -20,7 +21,9 @@
         android:paddingBottom="32dp"
         android:paddingTop="16dp"
         android:text="Placeholder For Song Title"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorAccent"
+
+        />
 
     <TextView
         android:id="@+id/det_rat_act_song_details"
@@ -40,5 +43,6 @@
         android:gravity="center"
         android:paddingBottom="16dp"
         android:paddingTop="32dp"
-        app:srcCompat="@drawable/rating_ph" />
+        app:srcCompat="@drawable/rating_ph"
+        />
 </LinearLayout>

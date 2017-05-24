@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@color/colorPrimaryDark"
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/playlist_manager_details_toolbar"
@@ -40,13 +42,15 @@
         android:id="@+id/playlist_songs_list_view"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="0.75"/>
+        android:layout_weight="0.99"/>
 
     <Button
         android:id="@+id/add_new_song_button"
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="0.25"
-        android:text="Add New Song" />
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/addd"/>
 
 </LinearLayout>
