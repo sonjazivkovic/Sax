@@ -9,7 +9,8 @@
     </style>
 
     <style name="CustomPopupTheme" parent="@style/ThemeOverlay.AppCompat.Light">
-        <item name="android:itemBackground">@color/colorAccent</item>
+        <item name="android:itemBackground">@color/colorPrimaryDark</item>
+        <item name="android:elevation">10dp</item>
     </style>
 
 </resources>

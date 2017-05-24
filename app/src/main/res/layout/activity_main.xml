@@ -23,6 +23,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"
                 tools:context="com.example.buca.saxmusicplayer.MainActivity"
                 android:weightSum="1">
 
@@ -45,9 +46,10 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
+                    android:layout_gravity="center"
                     app:srcCompat="@drawable/mptrames" />
 
                 <LinearLayout
@@ -110,7 +112,7 @@
                 android:id="@+id/left_drawer"
                 android:layout_gravity="start"
                 android:choiceMode="singleChoice"
-                android:background="#FFFFFF">
+                android:background="@color/colorPrimaryDark">
             </ListView>
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
