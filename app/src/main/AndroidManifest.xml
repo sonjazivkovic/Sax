@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"></activity>
@@ -74,5 +75,18 @@
                 android:value="com.example.buca.saxmusicplayer.activities.PlaylistManagerListActivity"
                 />
         </activity>
+
+        <provider
+            android:authorities="com.example.buca.saxmusicplayer"
+            android:name="com.example.buca.saxmusicplayer.providers.SongProvider"
+            ></provider>
+        <provider
+            android:authorities="com.example.buca.saxmusicplayer"
+            android:name="com.example.buca.saxmusicplayer.providers.PlaylistProvider"
+            ></provider>
+        <provider
+            android:authorities="com.example.buca.saxmusicplayer"
+            android:name="com.example.buca.saxmusicplayer.providers.SongPlaylistProvider"
+            ></provider>
     </application>
 </manifest>

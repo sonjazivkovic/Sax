@@ -14,24 +14,24 @@ import com.example.buca.saxmusicplayer.util.DatabaseContract;
 import com.example.buca.saxmusicplayer.util.DatabaseHelper;
 
 /**
- * Created by Stefan on 23/05/2017.
+ * Created by Stefan on 27/05/2017.
  */
 
-public class SongProvider extends ContentProvider {
+public class PlaylistProvider extends ContentProvider {
     private DatabaseHelper dbHelper;
 
-    private static final int SONGS = 10;
-    private static final int SONG_ID = 20;
+    private static final int PLAYLISTS = 10;
+    private static final int PLAYLIST_ID = 20;
 
     private static final String AUTHORITY = "com.example.buca.saxmusicplayer";
-    private static final String SONGS_PATH = "songs";
+    private static final String PLAYLISTS_PATH = "playlists";
 
-    public static final Uri CONTENT_URI_SONGS = Uri.parse("content://" + AUTHORITY + "/" + SONGS_PATH);
+    public static final Uri CONTENT_URI_PLAYLISTS = Uri.parse("content://" + AUTHORITY + "/" + PLAYLISTS_PATH);
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static{
-        sURIMatcher.addURI(AUTHORITY, SONGS_PATH, SONGS);
-        sURIMatcher.addURI(AUTHORITY, SONGS_PATH + "/#", SONG_ID);
+        sURIMatcher.addURI(AUTHORITY, PLAYLISTS_PATH, PLAYLISTS);
+        sURIMatcher.addURI(AUTHORITY, PLAYLISTS_PATH + "/#", PLAYLIST_ID);
     }
 
     @Override
@@ -47,10 +47,10 @@ public class SongProvider extends ContentProvider {
 
         int uriType = sURIMatcher.match(uri);
         switch(uriType){
-            case SONG_ID:
-                queryBuilder.appendWhere(DatabaseContract.SongTable._ID + "=" + uri.getLastPathSegment());
-            case SONGS:
-                queryBuilder.setTables(DatabaseContract.SongTable.TABLE_NAME);
+            case PLAYLIST_ID:
+                queryBuilder.appendWhere(DatabaseContract.PlaylistTable._ID + "=" + uri.getLastPathSegment());
+            case PLAYLISTS:
+                queryBuilder.setTables(DatabaseContract.PlaylistTable.TABLE_NAME);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI:" + uri);
@@ -77,9 +77,9 @@ public class SongProvider extends ContentProvider {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         long id = 0;
         switch(uriType){
-            case SONGS:
-                id = db.insert(DatabaseContract.SongTable.TABLE_NAME, null, values);
-                retVal = Uri.parse(SONGS_PATH + "/" + id);
+            case PLAYLISTS:
+                id = db.insert(DatabaseContract.PlaylistTable.TABLE_NAME, null, values);
+                retVal = Uri.parse(PLAYLISTS_PATH + "/" + id);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -94,17 +94,17 @@ public class SongProvider extends ContentProvider {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int rowsDeleted = 0;
         switch (uriType){
-            case SONGS:
-                rowsDeleted = db.delete(DatabaseContract.SongTable.TABLE_NAME, selection, selectionArgs);
+            case PLAYLISTS:
+                rowsDeleted = db.delete(DatabaseContract.PlaylistTable.TABLE_NAME, selection, selectionArgs);
                 break;
-            case SONG_ID:
-                String songID = uri.getLastPathSegment();
+            case PLAYLIST_ID:
+                String playlistID = uri.getLastPathSegment();
                 if(TextUtils.isEmpty(selection)){
-                    rowsDeleted = db.delete(DatabaseContract.SongTable.TABLE_NAME, DatabaseContract.SongTable._ID + "=" + songID, null);
+                    rowsDeleted = db.delete(DatabaseContract.PlaylistTable.TABLE_NAME, DatabaseContract.PlaylistTable._ID + "=" + playlistID, null);
                 }else{
-                    rowsDeleted = db.delete(DatabaseContract.SongTable.TABLE_NAME,
-                            DatabaseContract.SongTable._ID + "=" + songID
-                                + "and" + selection, selectionArgs);
+                    rowsDeleted = db.delete(DatabaseContract.PlaylistTable.TABLE_NAME,
+                            DatabaseContract.PlaylistTable._ID + "=" + playlistID
+                                    + "and" + selection, selectionArgs);
                 }
                 break;
             default:
@@ -120,16 +120,16 @@ public class SongProvider extends ContentProvider {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int rowsUpdated = 0;
         switch (uriType){
-            case SONGS:
-                rowsUpdated = db.update(DatabaseContract.SongTable.TABLE_NAME, values, selection, selectionArgs);
+            case PLAYLISTS:
+                rowsUpdated = db.update(DatabaseContract.PlaylistTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
-            case SONG_ID:
-                String songID = uri.getLastPathSegment();
+            case PLAYLIST_ID:
+                String playlistID = uri.getLastPathSegment();
                 if(TextUtils.isEmpty(selection)){
-                    rowsUpdated = db.update(DatabaseContract.SongTable.TABLE_NAME, values, DatabaseContract.SongTable._ID + "=" + songID, null);
+                    rowsUpdated = db.update(DatabaseContract.PlaylistTable.TABLE_NAME, values, DatabaseContract.PlaylistTable._ID + "=" + playlistID, null);
                 }else{
-                    rowsUpdated = db.update(DatabaseContract.SongTable.TABLE_NAME, values,
-                            DatabaseContract.SongTable._ID + "=" + songID
+                    rowsUpdated = db.update(DatabaseContract.PlaylistTable.TABLE_NAME, values,
+                            DatabaseContract.PlaylistTable._ID + "=" + playlistID
                                     + "and" + selection, selectionArgs);
                 }
                 break;
