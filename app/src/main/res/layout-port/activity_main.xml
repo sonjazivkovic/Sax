@@ -92,12 +92,28 @@
                                 app:srcCompat="@android:drawable/ic_media_next" />
 
                         </LinearLayout>
-
-                        <SeekBar
-                            android:id="@+id/seekBar"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"/>
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/movingTime"/>
+                            <SeekBar
+                                android:id="@+id/seekBar"
+                                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/endTime"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
             </LinearLayout>

@@ -58,7 +58,8 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     @Override
     public void onDestroy() {
         super.onDestroy();
-        player.stop();
+        if(player.isPlaying())
+            player.stop();
         player.release();
         player = null;
     }

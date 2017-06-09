@@ -17,12 +17,17 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
 import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
+
+import org.w3c.dom.Text;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         ImageButton playPause = (ImageButton)findViewById(R.id.button_play_pause);
         ImageButton playNextSong = (ImageButton)findViewById(R.id.button_next);
@@ -132,18 +136,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean("ServiceState", serviceBound);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        serviceBound = savedInstanceState.getBoolean("ServiceState");
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
         return true;
@@ -178,6 +170,19 @@ public class MainActivity extends AppCompatActivity {
         if(isFinishing() && serviceBound) {
             unbindService(serviceConnection);
             saxMusicPlayerService.stopSelf();
+        }else if(isChangingConfigurations() && serviceBound){
+            unbindService(serviceConnection);
         }
+    }
+
+    private void initSeekBar() {
+        long movingTime = (long)saxMusicPlayerService.getCurrentPosition();
+        long endTime = (long)saxMusicPlayerService.getDuration();
+        TextView movingTimeText = (TextView)findViewById(R.id.movingTime);
+        TextView endTimeText = (TextView)findViewById(R.id.endTime);
+        movingTimeText.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(movingTime),
+                TimeUnit.MILLISECONDS.toSeconds(movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(movingTime))));
+        endTimeText.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(endTime),
+                TimeUnit.MILLISECONDS.toSeconds(endTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(endTime))));
     }
 }
