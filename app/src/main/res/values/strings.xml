@@ -17,4 +17,7 @@
     <string name="scan_device_summary">Scan Your Device To Find New Songs</string>
     <string name="playlist_manager">Playlist Manager</string>
     <string name="playlist_manager_summary">Manage Your Playlists</string>
+
+    <string name="preference_file_key">com.example.buca.saxmusicplayer.PREFERENCE_FILE_KEY</string>
+    <string name="initial_scan_done_key">com.example.buca.saxmusicplayer.INITIAL_SCAN_DONE_KEY</string>
 </resources>
