@@ -23,7 +23,7 @@ public class SongProvider extends ContentProvider {
     private static final int SONGS = 10;
     private static final int SONG_ID = 20;
 
-    private static final String AUTHORITY = "com.example.buca.saxmusicplayer";
+    private static final String AUTHORITY = "com.example.buca.saxmusicplayer.songprovider";
     private static final String SONGS_PATH = "songs";
 
     public static final Uri CONTENT_URI_SONGS = Uri.parse("content://" + AUTHORITY + "/" + SONGS_PATH);

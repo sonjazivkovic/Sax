@@ -23,8 +23,6 @@ public class SongBean {
 
     private int year;
 
-    private String genre;
-
     public long getId() {
         return id;
     }
@@ -73,14 +71,6 @@ public class SongBean {
         this.year = year;
     }
 
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public static SongBean createSongFromCursor(Cursor cursor){
         SongBean retVal = new SongBean();
         retVal.setId(cursor.getLong(0));
@@ -89,7 +79,6 @@ public class SongBean {
         retVal.setArtist(cursor.getString(3));
         retVal.setAlbum(cursor.getString(4));
         retVal.setYear(cursor.getInt(5));
-        retVal.setGenre(cursor.getString(6));
         return retVal;
     }
 

@@ -19,11 +19,10 @@ public final class DatabaseContract {
         public static final String COLUMN_ARTIST = "artist";
         public static final String COLUMN_ALBUM = "album";
         public static final String COLUMN_YEAR = "year";
-        public static final String COLUMN_GENRE = "genre";
 
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + _ID + " INTEGER PRIMARY KEY,"
                 + COLUMN_PATH + " TEXT," + COLUMN_TITLE + " TEXT," + COLUMN_ARTIST + " TEXT," + COLUMN_ALBUM + " TEXT,"
-                + COLUMN_YEAR + " INTEGER," + COLUMN_GENRE + " TEXT)";
+                + COLUMN_YEAR + " INTEGER)";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS" + TABLE_NAME;
 
     }
@@ -48,7 +47,7 @@ public final class DatabaseContract {
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + _ID + " INTEGER PRIMARY KEY,"
                 + COLUMN_PLAYLIST_ID + " INTEGER," + COLUMN_SONG_ID + " INTEGER,"
                 + " FOREIGN KEY(" + COLUMN_PLAYLIST_ID + ") REFERENCES " + PlaylistTable.TABLE_NAME + "(" + PlaylistTable._ID + "),"
-                + " FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + SongTable.TABLE_NAME + "(" + SongTable._ID + ")";
+                + " FOREIGN KEY(" + COLUMN_SONG_ID + ") REFERENCES " + SongTable.TABLE_NAME + "(" + SongTable._ID + "))";
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS" + TABLE_NAME;
 
     }

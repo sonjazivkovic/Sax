@@ -80,15 +80,15 @@
         <service android:name="com.example.buca.saxmusicplayer.services.SaxMusicPlayerService"/>
 
         <provider
-            android:authorities="com.example.buca.saxmusicplayer"
+            android:authorities="com.example.buca.saxmusicplayer.songprovider"
             android:name="com.example.buca.saxmusicplayer.providers.SongProvider"
             ></provider>
         <provider
-            android:authorities="com.example.buca.saxmusicplayer"
+            android:authorities="com.example.buca.saxmusicplayer.playlistprovider"
             android:name="com.example.buca.saxmusicplayer.providers.PlaylistProvider"
             ></provider>
         <provider
-            android:authorities="com.example.buca.saxmusicplayer"
+            android:authorities="com.example.buca.saxmusicplayer.songplaylistprovider"
             android:name="com.example.buca.saxmusicplayer.providers.SongPlaylistProvider"
             ></provider>
     </application>

@@ -23,7 +23,7 @@ public class PlaylistProvider extends ContentProvider {
     private static final int PLAYLISTS = 10;
     private static final int PLAYLIST_ID = 20;
 
-    private static final String AUTHORITY = "com.example.buca.saxmusicplayer";
+    private static final String AUTHORITY = "com.example.buca.saxmusicplayer.playlistprovider";
     private static final String PLAYLISTS_PATH = "playlists";
 
     public static final Uri CONTENT_URI_PLAYLISTS = Uri.parse("content://" + AUTHORITY + "/" + PLAYLISTS_PATH);
