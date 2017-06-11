@@ -10,6 +10,7 @@ import android.os.PowerManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 
 import java.io.IOException;
@@ -53,6 +54,8 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     @Override
     public void onPrepared(MediaPlayer mp) {
         player.start();
+        Intent intent = new Intent(MainActivity.Broadcast_SONG_META_DATA);
+        sendBroadcast(intent);
     }
 
     @Override
@@ -105,6 +108,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
 
     public void seekTo(int seekPosition){
         player.seekTo(seekPosition);
+        player.start();
     }
 
     public int getDuration(){
