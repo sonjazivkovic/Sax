@@ -53,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            /*kada se aktivnost poveze sa servisom postavljamo referencu ka servisu kako bi mogli koristiti njegove metode*/
             SaxMusicPlayerService.SaxMusicPlayerBinder binder = (SaxMusicPlayerService.SaxMusicPlayerBinder) service;
             saxMusicPlayerService = binder.getService();
             serviceBound = true;
+
+            /*ukoliko se u plejeru nalazi pesma treba inicijalizovati seekbar - ovo je zbog toga sto se restartuje aktivnost pri rotaciji ekrana, da se ne izgubi seekbar progres*/
             if(!DataHolder.getResetAndPrepare())
                 initSeekBar();
         }
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                      }
                  }
         );
+        /*ukoliko je pauzirana reprodukcija na ff i bf resetovati seekbar*/
         playNextSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*provera da li postoji pesma u plejeru, ukoliko ne postoji onemoguciti kornisniku da klikce po seekbaru*/
         if(DataHolder.getResetAndPrepare())
             seekBar.setEnabled(false);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -237,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        /*proverava se da li se aktivnost unistava ili se samo menja konfiguracija*/
         if(isFinishing() && serviceBound) {
             unbindService(serviceConnection);
             saxMusicPlayerService.stopSelf();

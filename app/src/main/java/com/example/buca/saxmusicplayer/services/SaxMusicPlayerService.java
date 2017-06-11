@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.buca.saxmusicplayer.MainActivity;
@@ -90,6 +89,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         player.start();
     }
 
+    /*ff i bf prvo proveravaju da li je u toku reprodukcija, ukoliko nije samo se menja redosled pesme i postavlja se flag da treba resetovati plejer za pustanje nove*/
     public void fastForward(){
         DataHolder.nextSong();
         if(player.isPlaying())
@@ -106,6 +106,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
             DataHolder.setResetAndPrepare(true);
     }
 
+    /*premotavanje stopira reprodukciju pa se zbog toga poziva start odmah nakon premotavanja*/
     public void seekTo(int seekPosition){
         player.seekTo(seekPosition);
         player.start();
