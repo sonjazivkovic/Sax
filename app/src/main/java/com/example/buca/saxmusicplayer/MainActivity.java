@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView movingTimeText;
     private TextView endTimeText;
     private SeekBar seekBar;
+    private ImageButton playPause;
+    private ImageButton playNextSong;
+    private ImageButton playPrevSong;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -119,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
         endTimeText = (TextView)findViewById(R.id.endTime);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
 
-        ImageButton playPause = (ImageButton)findViewById(R.id.button_play_pause);
-        ImageButton playNextSong = (ImageButton)findViewById(R.id.button_next);
-        ImageButton playPrevSong = (ImageButton)findViewById(R.id.button_prev);
+        playPause = (ImageButton)findViewById(R.id.button_play_pause);
+        playNextSong = (ImageButton)findViewById(R.id.button_next);
+        playPrevSong = (ImageButton)findViewById(R.id.button_prev);
         playPause.setOnClickListener(
                 new View.OnClickListener() {
                      @Override
@@ -138,13 +141,11 @@ public class MainActivity extends AppCompatActivity {
                      }
                  }
         );
-        /*ukoliko je pauzirana reprodukcija na ff i bf resetovati seekbar*/
+
         playNextSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!saxMusicPlayerService.isPlaying())
-                    resetSeekBar();
-
+                resetSeekBar(saxMusicPlayerService.isPlaying());
                 saxMusicPlayerService.fastForward();
             }
         });
@@ -152,9 +153,7 @@ public class MainActivity extends AppCompatActivity {
         playPrevSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!saxMusicPlayerService.isPlaying())
-                    resetSeekBar();
-
+                resetSeekBar(saxMusicPlayerService.isPlaying());
                 saxMusicPlayerService.backForward();
             }
         });
@@ -175,6 +174,9 @@ public class MainActivity extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {
                 saxMusicPlayerService.pause();
                 runnableHandler.removeCallbacks(updateSongTime);
+                playPause.setEnabled(false);
+                playNextSong.setEnabled(false);
+                playPrevSong.setEnabled(false);
             }
 
             @Override
@@ -182,6 +184,9 @@ public class MainActivity extends AppCompatActivity {
                 int endTime = saxMusicPlayerService.getDuration();
                 saxMusicPlayerService.seekTo(MathUtil.getNumberFromPercentage(seekBar.getProgress(), endTime));
                 runnableHandler.postDelayed(updateSongTime, 1000);
+                playPause.setEnabled(true);
+                playNextSong.setEnabled(true);
+                playPrevSong.setEnabled(true);
             }
         });
 
@@ -246,14 +251,11 @@ public class MainActivity extends AppCompatActivity {
         if(isFinishing() && serviceBound) {
             unbindService(serviceConnection);
             saxMusicPlayerService.stopSelf();
-            unregisterReceiver(songMetaDataUpdateReceiver);
-            runnableHandler.removeCallbacks(updateSongTime);
         }else if(isChangingConfigurations() && serviceBound){
             unbindService(serviceConnection);
-            unregisterReceiver(songMetaDataUpdateReceiver);
-            runnableHandler.removeCallbacks(updateSongTime);
         }
-
+        unregisterReceiver(songMetaDataUpdateReceiver);
+        runnableHandler.removeCallbacks(updateSongTime);
     }
 
     private void initSeekBar() {
@@ -270,11 +272,12 @@ public class MainActivity extends AppCompatActivity {
         runnableHandler.postDelayed(updateSongTime, 1000);
     }
 
-    private void resetSeekBar(){
+    private void resetSeekBar(boolean isPlaying){
         movingTimeText.setText("00:00");
         endTimeText.setText("00:00");
         seekBar.setProgress(0);
-        seekBar.setEnabled(false);
+        if(!isPlaying)
+            seekBar.setEnabled(false);
         runnableHandler.removeCallbacks(updateSongTime);
     }
 
