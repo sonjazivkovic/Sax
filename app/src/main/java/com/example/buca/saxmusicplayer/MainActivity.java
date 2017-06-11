@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private SaxMusicPlayerService saxMusicPlayerService;
     private boolean serviceBound = false;
     public static String Broadcast_SONG_META_DATA = "com.example.buca.saxmusicplayer.broadcast.SONG_META_DATA";
+    public static String Broadcast_RESET_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.RESET_SEEK_BAR";
     private Handler runnableHandler = new Handler();
     private TextView movingTimeText;
     private TextView endTimeText;
@@ -75,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver songMetaDataUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            initSeekBar();
+            if(intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false))
+                resetSeekBar(false);
+            else
+                initSeekBar();
         }
     };
 
