@@ -8,6 +8,8 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.example.buca.saxmusicplayer.MainActivity;
@@ -24,12 +26,16 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     private MediaPlayer player;
     private IBinder iBinder = new SaxMusicPlayerBinder();
     private AudioManager audioManager;
+    private PhoneStateListener phoneStateListener;
+    private TelephonyManager telephonyManager;
+    private boolean callOngoing = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
         initPlayer();
         requestAudioFocus();
+        callStateListener();
     }
 
     @Override
@@ -105,6 +111,32 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
 
     private void removeAudioFocus(){
         audioManager.abandonAudioFocus(this);
+    }
+
+    private void callStateListener(){
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        phoneStateListener = new PhoneStateListener(){
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                switch (state){
+                    //postoji bar jedan poziv (zvoni telefon, poziv u toku, na cekanju,...)
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                        //zvoni telefon - zaustavi reprodukciju
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        player.pause();
+                        callOngoing = true;
+                        break;
+                    //nema poziva - nastavi reprodukciju
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        if(callOngoing) {
+                            player.start();
+                            callOngoing = false;
+                        }
+                        break;
+                }
+            }
+        };
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
 
     private void initPlayer(){
