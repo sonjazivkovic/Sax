@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sax Music Player</string>
+    <string name="all_songs">Све песме</string>
+    <string name="choose_playlist">Изабери плејлисту</string>
+    <string name="default_playlist">Подразумевана плејлиста</string>
+    <string name="default_playlist_preference">Подразумевана Плејлиста</string>
+    <string name="default_playlist_summary">Изабери подразумевану плејлисту</string>
+    <string name="details_rating">Детаљи и оцена</string>
+    <string name="language_preference">Језик</string>
+    <string name="language_summary">Изабери језик</string>
+    <string name="lyrics">Текст</string>
+    <string name="playlist_manager">Управљање плејлистама</string>
+    <string name="playlist_manager_summary">Управљај својим плејлистама</string>
+    <string name="scan_device">Скенирај песме на уређају</string>
+    <string name="scan_device_summary">Скенирај нове песме на уређају</string>
+    <string name="settings">Подешавања</string>
+    <string name="welcome_text">Добродошли у Sax Музички плејер</string>
+</resources>
