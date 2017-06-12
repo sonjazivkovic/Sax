@@ -1,21 +1,33 @@
 package com.example.buca.saxmusicplayer.services;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.session.MediaSessionManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.RemoteException;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.example.buca.saxmusicplayer.MainActivity;
+import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 
 import java.io.IOException;
+
+import static com.example.buca.saxmusicplayer.R.string.welcome_text;
 
 /**
  * Created by Stefan on 04/06/2017.
@@ -30,12 +42,18 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     private TelephonyManager telephonyManager;
     private boolean callOngoing = false;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
         initPlayer();
         requestAudioFocus();
         callStateListener();
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getResources().getString(R.string.app_name))
+                .setContentText(getResources().getString(R.string.welcome_text));
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(1234123, mBuilder.build());
     }
 
     @Override
@@ -69,9 +87,17 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
             player.stop();
         player.release();
         player = null;
+       removeNotification();
         removeAudioFocus();
     }
 
+    private void removeNotification() {
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.cancel(1234123);
+
+    }
     /*kada neka druga aplikacija zatrazi da pusta muziku moramo pauzirati ili zaustaviti nas plejer*/
     @Override
     public void onAudioFocusChange(int focusChange) {
@@ -222,4 +248,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
             return SaxMusicPlayerService.this;
         }
     }
+
+
+
 }
