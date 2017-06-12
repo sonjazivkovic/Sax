@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false))
-                resetSeekBar(false);
+                resetSeekBar();
             else if(intent.getBooleanExtra(Broadcast_RESET_MAIN_ACTIVITY, false))
                 MainActivity.this.recreate();
             else
@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
         playNextSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetSeekBar(saxMusicPlayerService.isPlaying());
                 saxMusicPlayerService.fastForward();
             }
         });
@@ -163,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         playPrevSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetSeekBar(saxMusicPlayerService.isPlaying());
                 saxMusicPlayerService.backForward();
             }
         });
@@ -294,13 +292,12 @@ public class MainActivity extends AppCompatActivity {
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
     }
-    private void resetSeekBar(boolean isPlaying){
+    private void resetSeekBar(){
         runnableHandler.removeCallbacks(updateSongTime);
         movingTimeText.setText("00:00");
         endTimeText.setText("00:00");
         seekBar.setProgress(0);
-        if(!isPlaying)
-            seekBar.setEnabled(false);
+        seekBar.setEnabled(false);
     }
 
     private void registerUiUpdateReceiver(){

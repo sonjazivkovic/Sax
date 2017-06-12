@@ -178,6 +178,11 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         DataHolder.setResetAndPrepare(true);
         if(player.isPlaying())
             play();
+        else{
+            Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+            intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+            sendBroadcast(intent);
+        }
     }
 
     public void backForward(){
@@ -185,6 +190,11 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         DataHolder.setResetAndPrepare(true);
         if(player.isPlaying())
             play();
+        else{
+            Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+            intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+            sendBroadcast(intent);
+        }
     }
 
     /*premotavanje stopira reprodukciju pa se zbog toga poziva start odmah nakon premotavanja*/
