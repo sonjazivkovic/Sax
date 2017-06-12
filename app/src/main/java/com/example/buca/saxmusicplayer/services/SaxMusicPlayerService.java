@@ -49,10 +49,22 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         initPlayer();
         requestAudioFocus();
         callStateListener();
+        createNotification();
+    }
+    public void createNotification() {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText(getResources().getString(R.string.welcome_text));
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                intent, 0);
+        mBuilder.setContentIntent(pendingIntent);
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(1234123, mBuilder.build());
     }
 
