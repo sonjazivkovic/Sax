@@ -6,7 +6,8 @@
         android:summary="@string/language_summary"
         android:dialogTitle="@string/language_preference"
         android:entries="@array/language_entries"
-        android:entryValues="@array/language_entry_values" />
+        android:entryValues="@array/language_entry_values"
+        android:defaultValue="@string/lang_en_value"/>
 
     <ListPreference
         android:key="default_playlist_preference"

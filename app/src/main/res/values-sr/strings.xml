@@ -16,4 +16,6 @@
     <string name="scan_device_summary">Скенирај нове песме на уређају</string>
     <string name="settings">Подешавања</string>
     <string name="welcome_text">Добродошли у Sax Музички плејер</string>
+    <string name="lang_en">Енглески</string>
+    <string name="lang_sr">Српски</string>
 </resources>

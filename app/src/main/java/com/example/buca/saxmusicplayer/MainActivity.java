@@ -6,20 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.ContactsContract;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -32,8 +33,7 @@ import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 import com.example.buca.saxmusicplayer.util.MathUtil;
 
-import org.w3c.dom.Text;
-
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
+    private Button changeLang;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -98,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        changeLang();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -275,7 +278,17 @@ public class MainActivity extends AppCompatActivity {
         runnableHandler.removeCallbacks(updateSongTime);
         runnableHandler.postDelayed(updateSongTime, 1000);
     }
+    /*Ovde citamo iz Shared preferences fajla koji je jezik izabran od strane korisnika, i koristimo taj jezik pri pokretanju Main aktivnosti*/
+    public void changeLang() {
+        SharedPreferences sp = getSharedPreferences("language_preference", MODE_PRIVATE);
+        String languageToLoad = sp.getString("language_preference", "en"); // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
+    }
     private void resetSeekBar(boolean isPlaying){
         movingTimeText.setText("00:00");
         endTimeText.setText("00:00");
