@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     >
 
-    <TextView
-        android:id="@+id/text_item_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
 
-</LinearLayout>
+        <TextView
+                android:id="@+id/text_item_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textStyle="bold"
+
+                />
+        <TextView
+            android:id="@+id/text_item_view_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/remove_playlist_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_delete"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
+
+    <Button
+        android:id="@+id/edit_playlist_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_edit"
+        android:layout_toStartOf="@id/remove_playlist_button"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>

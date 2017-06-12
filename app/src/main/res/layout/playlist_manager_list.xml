@@ -19,20 +19,55 @@
             app:popupTheme="@style/CustomPopupTheme"
             />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <EditText
+                android:id="@+id/playlist_list_view_playlist_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/playlist_name"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/search_playlist_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@android:drawable/ic_menu_search"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0"/>
+            <Button
+                android:id="@+id/clean_search_playlist_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@android:drawable/ic_notification_clear_all"
+                android:layout_marginRight="15dp"
+                android:layout_weight="0"/>
+            <Button
+                android:id="@+id/add_new_playlist_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/addd"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"/>
+
         <ListView
             android:id="@+id/playlist_list_view"
             android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="2"/>
-
-        <Button
-            android:id="@+id/add_new_playlist_button"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/addd"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp" />
 
     </LinearLayout>
 </LinearLayout>
