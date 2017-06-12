@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -44,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private SaxMusicPlayerService saxMusicPlayerService;
     private boolean serviceBound = false;
-    public static String Broadcast_SONG_META_DATA = "com.example.buca.saxmusicplayer.broadcast.SONG_META_DATA";
+    public static String Broadcast_UPDATE_UI_MAIN_ACTIVITY = "com.example.buca.saxmusicplayer.broadcast.UPDATE_UI_MAIN_ACTIVITY";
     public static String Broadcast_RESET_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.RESET_SEEK_BAR";
+    public static String Broadcast_RESET_MAIN_ACTIVITY = "com.example.buca.saxmusicplayer.broadcast.RESET_MAIN_ACTIVITY";
     private Handler runnableHandler = new Handler();
     private TextView movingTimeText;
     private TextView endTimeText;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
-    private Button changeLang;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -74,11 +72,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver songMetaDataUpdateReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver uiUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false))
                 resetSeekBar(false);
+            else if(intent.getBooleanExtra(Broadcast_RESET_MAIN_ACTIVITY, false))
+                MainActivity.this.recreate();
             else
                 initSeekBar();
         }
@@ -89,10 +89,12 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             int movingTime = saxMusicPlayerService.getCurrentPosition();
             int endTime = saxMusicPlayerService.getDuration();
-            movingTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long)movingTime),
-                    TimeUnit.MILLISECONDS.toSeconds((long)movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)movingTime))));
-            SeekBar sb = (SeekBar)findViewById(R.id.seekBar);
-            sb.setProgress(MathUtil.getPercentage(movingTime,endTime));
+            if(movingTime != -1 && endTime != -1) {
+                movingTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) movingTime),
+                        TimeUnit.MILLISECONDS.toSeconds((long) movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) movingTime))));
+                SeekBar sb = (SeekBar) findViewById(R.id.seekBar);
+                sb.setProgress(MathUtil.getPercentage(movingTime, endTime));
+            }
             runnableHandler.postDelayed(this, 1000);
         }
     };
@@ -138,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
                      public void onClick(View v) {
                          if(DataHolder.getResetAndPrepare()) {
                              saxMusicPlayerService.play();
-                             DataHolder.setResetAndPrepare(false);
                          }else{
                              if(saxMusicPlayerService.isPlaying())
                                  saxMusicPlayerService.pause();
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        registerSongMetaDataUpdateReceiver();
+        registerUiUpdateReceiver();
     }
 
     @Override
@@ -261,21 +262,23 @@ public class MainActivity extends AppCompatActivity {
         }else if(isChangingConfigurations() && serviceBound){
             unbindService(serviceConnection);
         }
-        unregisterReceiver(songMetaDataUpdateReceiver);
+        unregisterReceiver(uiUpdateReceiver);
         runnableHandler.removeCallbacks(updateSongTime);
     }
 
     private void initSeekBar() {
+        runnableHandler.removeCallbacks(updateSongTime);
         int movingTime = saxMusicPlayerService.getCurrentPosition();
         int endTime = saxMusicPlayerService.getDuration();
-        movingTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long)movingTime),
-                TimeUnit.MILLISECONDS.toSeconds((long)movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)movingTime))));
-        endTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long)endTime),
-                TimeUnit.MILLISECONDS.toSeconds((long)endTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)endTime))));
-        seekBar.setMax(MathUtil.getPercentage(endTime, endTime));
-        seekBar.setProgress(MathUtil.getPercentage(movingTime, endTime));
-        seekBar.setEnabled(true);
-        runnableHandler.removeCallbacks(updateSongTime);
+        if(movingTime != -1 && endTime != -1) {
+            movingTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) movingTime),
+                    TimeUnit.MILLISECONDS.toSeconds((long) movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) movingTime))));
+            endTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) endTime),
+                    TimeUnit.MILLISECONDS.toSeconds((long) endTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) endTime))));
+            seekBar.setMax(MathUtil.getPercentage(endTime, endTime));
+            seekBar.setProgress(MathUtil.getPercentage(movingTime, endTime));
+            seekBar.setEnabled(true);
+        }
         runnableHandler.postDelayed(updateSongTime, 1000);
     }
     /*Ovde citamo iz Shared preferences fajla koji je jezik izabran od strane korisnika, i koristimo taj jezik pri pokretanju Main aktivnosti*/
@@ -290,16 +293,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void resetSeekBar(boolean isPlaying){
+        runnableHandler.removeCallbacks(updateSongTime);
         movingTimeText.setText("00:00");
         endTimeText.setText("00:00");
         seekBar.setProgress(0);
         if(!isPlaying)
             seekBar.setEnabled(false);
-        runnableHandler.removeCallbacks(updateSongTime);
     }
 
-    private void registerSongMetaDataUpdateReceiver(){
-        IntentFilter filter = new IntentFilter(Broadcast_SONG_META_DATA);
-        registerReceiver(songMetaDataUpdateReceiver, filter);
+    private void registerUiUpdateReceiver(){
+        IntentFilter filter = new IntentFilter(Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+        registerReceiver(uiUpdateReceiver, filter);
     }
 }

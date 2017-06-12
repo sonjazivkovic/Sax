@@ -1,9 +1,13 @@
 package com.example.buca.saxmusicplayer.activities;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -35,14 +39,21 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Display the fragment as the main content
-        getFragmentManager().beginTransaction().replace(R.id.preference_fragment_container, new SettingsFragment()).commit();
-    }
+        SettingsFragment sf = new SettingsFragment();
+        getFragmentManager().beginTransaction().replace(R.id.preference_fragment_container, sf).commit();
+        getFragmentManager().executePendingTransactions();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent mainIntent = new Intent(SettingsActivity.this, MainActivity.class);
-        startActivity(mainIntent);
-        return super.onOptionsItemSelected(item);
+        ListPreference lp = (ListPreference) sf.findPreference("language_preference");
+        lp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Intent mainIntent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+                mainIntent.putExtra(MainActivity.Broadcast_RESET_MAIN_ACTIVITY, true);
+                sendBroadcast(mainIntent);
+                finish();
+                return true;
+            }
+        });
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -54,7 +65,6 @@ public class SettingsActivity extends AppCompatActivity {
             pm.setSharedPreferencesName("language_preference");
             addPreferencesFromResource(R.xml.preferences);
         }
-
     }
 
 }

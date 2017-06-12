@@ -57,7 +57,8 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     @Override
     public void onPrepared(MediaPlayer mp) {
         player.start();
-        Intent intent = new Intent(MainActivity.Broadcast_SONG_META_DATA);
+        DataHolder.setResetAndPrepare(false);
+        Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
         sendBroadcast(intent);
     }
 
@@ -87,7 +88,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
                 if(player.isPlaying()) {
                     player.stop();
                     DataHolder.setResetAndPrepare(true);
-                    Intent intent = new Intent(MainActivity.Broadcast_SONG_META_DATA);
+                    Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
                     intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
                     sendBroadcast(intent);
                 }
@@ -174,18 +175,16 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     /*ff i bf prvo proveravaju da li je u toku reprodukcija, ukoliko nije samo se menja redosled pesme i postavlja se flag da treba resetovati plejer za pustanje nove*/
     public void fastForward(){
         DataHolder.nextSong();
+        DataHolder.setResetAndPrepare(true);
         if(player.isPlaying())
             play();
-        else
-            DataHolder.setResetAndPrepare(true);
     }
 
     public void backForward(){
         DataHolder.previousSong();
+        DataHolder.setResetAndPrepare(true);
         if(player.isPlaying())
             play();
-        else
-            DataHolder.setResetAndPrepare(true);
     }
 
     /*premotavanje stopira reprodukciju pa se zbog toga poziva start odmah nakon premotavanja*/
@@ -195,11 +194,17 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     }
 
     public int getDuration(){
-        return player.getDuration();
+        if(DataHolder.getResetAndPrepare())
+            return -1;
+        else
+            return player.getDuration();
     }
 
     public int getCurrentPosition(){
-        return player.getCurrentPosition();
+        if(DataHolder.getResetAndPrepare())
+            return -1;
+        else
+            return player.getCurrentPosition();
     }
 
     public class SaxMusicPlayerBinder extends Binder {
