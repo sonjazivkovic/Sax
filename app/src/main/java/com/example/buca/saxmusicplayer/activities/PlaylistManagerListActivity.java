@@ -27,6 +27,8 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setTitle(R.string.playlist_manager);
+
         String[] placeholderList = {"Placeholder Playlist 1", "Placeholder Playlist 2", "Placeholder Playlist 3"};
 
         ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.playlist_manager_list_item, R.id.text_item_view, placeholderList);

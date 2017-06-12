@@ -38,6 +38,8 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setTitle(R.string.settings);
+
         //Display the fragment as the main content
         SettingsFragment sf = new SettingsFragment();
         getFragmentManager().beginTransaction().replace(R.id.preference_fragment_container, sf).commit();

@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setTitle(R.string.app_name);
+
         movingTimeText = (TextView)findViewById(R.id.movingTime);
         endTimeText = (TextView)findViewById(R.id.endTime);
         seekBar = (SeekBar)findViewById(R.id.seekBar);

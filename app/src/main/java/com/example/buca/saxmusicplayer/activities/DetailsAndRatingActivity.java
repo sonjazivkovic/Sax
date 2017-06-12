@@ -20,5 +20,7 @@ public class DetailsAndRatingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(R.string.details_rating);
     }
 }

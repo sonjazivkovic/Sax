@@ -20,5 +20,7 @@ public class LyricsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(R.string.lyrics);
     }
 }
