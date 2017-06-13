@@ -1,5 +1,11 @@
 package com.example.buca.saxmusicplayer;
 
+import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
+import com.example.buca.saxmusicplayer.activities.LyricsActivity;
+import com.example.buca.saxmusicplayer.activities.SettingsActivity;
+import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
+import com.example.buca.saxmusicplayer.util.DataHolder;
+import com.example.buca.saxmusicplayer.util.MathUtil;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,6 +17,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,22 +32,10 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
-import com.example.buca.saxmusicplayer.activities.LyricsActivity;
-import com.example.buca.saxmusicplayer.activities.SettingsActivity;
-import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
-import com.example.buca.saxmusicplayer.util.DataHolder;
-import com.example.buca.saxmusicplayer.util.MathUtil;
-
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity {
 
     private String[] menuItems;
     private ListView drawerList;
@@ -58,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
-    private Sensor sensorPlay;
-    private SensorManager sensorManagerPlay;
+
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -110,9 +104,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sensorManagerPlay = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sensorPlay = sensorManagerPlay.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManagerPlay.registerListener(this, sensorPlay, SensorManager.SENSOR_DELAY_NORMAL);
         changeLang();
         super.onCreate(savedInstanceState);
 
@@ -327,16 +318,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         registerReceiver(uiUpdateReceiver, filter);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.values[2] < -9.8) {
-            saxMusicPlayerService.pause();
-        }
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 }

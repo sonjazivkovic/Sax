@@ -14,6 +14,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.os.Vibrator;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -21,6 +22,10 @@ import android.support.v7.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
@@ -34,7 +39,7 @@ import static com.example.buca.saxmusicplayer.R.string.welcome_text;
  * Created by Stefan on 04/06/2017.
  */
 
-public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
+public class SaxMusicPlayerService extends Service implements SensorEventListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
     private MediaPlayer player;
     private IBinder iBinder = new SaxMusicPlayerBinder();
@@ -43,6 +48,8 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     private TelephonyManager telephonyManager;
     private boolean callOngoing = false;
     private boolean playbackStopedByUser = false;
+    private Sensor sensorPlay;
+    private SensorManager sensorManagerPlay;
 
     public static final String ACTION_PLAY = "com.example.buca.saxmusicplayer.ACTION_PLAY";
     public static final String ACTION_PAUSE = "com.example.buca.saxmusicplayer.ACTION_PAUSE";
@@ -64,6 +71,9 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
 
     @Override
     public void onCreate() {
+        sensorManagerPlay = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorPlay = sensorManagerPlay.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManagerPlay.registerListener(this, sensorPlay, SensorManager.SENSOR_DELAY_NORMAL);
         super.onCreate();
         initPlayer();
         requestAudioFocus();
@@ -398,6 +408,26 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     private void removeNotification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(NOTIFICATION_ID);
+
+    }
+    public void onSensorChanged(SensorEvent event) {
+
+        if (event.values[2] < -9.8) {
+            if (this.isPlaying()){
+                this.pause();
+                vibrate(300);
+            }
+        }
+
+    }
+    public void vibrate(int duration)
+    {
+        Vibrator vibs = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibs.vibrate(duration);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
