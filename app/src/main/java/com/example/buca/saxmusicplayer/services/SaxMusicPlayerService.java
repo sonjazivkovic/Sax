@@ -42,6 +42,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     private PhoneStateListener phoneStateListener;
     private TelephonyManager telephonyManager;
     private boolean callOngoing = false;
+    private boolean playbackStopedByUser = false;
 
     public static final String ACTION_PLAY = "com.example.buca.saxmusicplayer.ACTION_PLAY";
     public static final String ACTION_PAUSE = "com.example.buca.saxmusicplayer.ACTION_PAUSE";
@@ -79,10 +80,8 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         if (mediaSessionManager == null) {
             try {
                 initMediaSession();
-                initPlayer();
             } catch (RemoteException e) {
                 e.printStackTrace();
-                stopSelf();
             }
 
         }
@@ -135,18 +134,21 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
             /*kada dobijemo fokus pustamo plejer da svira*/
             case AudioManager.AUDIOFOCUS_GAIN:
                 if(!player.isPlaying()){
-                    player.start();
+                    if (!playbackStopedByUser)
+                         player.start();
                 }
                 player.setVolume(1.0f, 1.0f);
                 break;
             /*ako izgubimo fokus na duze vreme, koristi se neka druga aplikacija za muziku npr*/
             case AudioManager.AUDIOFOCUS_LOSS:
                 if(player.isPlaying()) {
+                    createNotification(PlaybackStatus.PAUSED);
                     player.stop();
                     DataHolder.setResetAndPrepare(true);
                     Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
                     intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
                     sendBroadcast(intent);
+
                 }
             /*ako izgubimo fokus na krace vreme*/
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
@@ -175,6 +177,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         phoneStateListener = new PhoneStateListener(){
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
+
                 switch (state){
                     //postoji bar jedan poziv (zvoni telefon, poziv u toku, na cekanju,...)
                     case TelephonyManager.CALL_STATE_OFFHOOK:
@@ -186,8 +189,10 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
                     //nema poziva - nastavi reprodukciju
                     case TelephonyManager.CALL_STATE_IDLE:
                         if(callOngoing) {
-                            player.start();
-                            callOngoing = false;
+                            if (!playbackStopedByUser) {
+                                player.start();
+                                callOngoing = false;
+                            }
                         }
                         break;
                 }
@@ -224,11 +229,13 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
 
     public void pause(){
         player.pause();
+        playbackStopedByUser = true;
         createNotification(PlaybackStatus.PAUSED);
     }
 
     public void resume(){
         player.start();
+        playbackStopedByUser = false;
         createNotification(PlaybackStatus.PLAYING);
     }
 
@@ -357,7 +364,6 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
 
         mediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
         mediaSession = new MediaSessionCompat(getApplicationContext(), "AudioPlayer");
-      //  transportControls = mediaSession.getController().getTransportControls();
         mediaSession.setActive(true);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
@@ -385,8 +391,6 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
            this.fastForward();
         } else if (actionString.equalsIgnoreCase(ACTION_PREVIOUS)) {
            this.backForward();
-        } else if (actionString.equalsIgnoreCase(ACTION_STOP)) {
-          // this.stop();
         }
     }
 
