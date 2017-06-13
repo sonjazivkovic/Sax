@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         seekBar = (SeekBar)findViewById(R.id.seekBar);
 
         playPause = (ImageButton)findViewById(R.id.button_play_pause);
+
         playNextSong = (ImageButton)findViewById(R.id.button_next);
         playPrevSong = (ImageButton)findViewById(R.id.button_prev);
         playPause.setOnClickListener(
@@ -209,11 +210,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void play_pause() {
         if(DataHolder.getResetAndPrepare()) {
             saxMusicPlayerService.play();
+            playPause.setImageResource(R.drawable.play);
         }else{
-            if(saxMusicPlayerService.isPlaying())
+            if(saxMusicPlayerService.isPlaying()) {
                 saxMusicPlayerService.pause();
-            else
+                playPause.setImageResource(R.drawable.main_pause_icon);
+            }
+            else {
                 saxMusicPlayerService.resume();
+                playPause.setImageResource(R.drawable.play);
+            }
         }
     }
 
