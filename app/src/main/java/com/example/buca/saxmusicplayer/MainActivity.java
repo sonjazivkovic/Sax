@@ -35,7 +35,12 @@ import com.example.buca.saxmusicplayer.util.MathUtil;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private String[] menuItems;
     private ListView drawerList;
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
+    private Sensor sensorPlay;
+    private SensorManager sensorManagerPlay;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -103,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sensorManagerPlay = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorPlay = sensorManagerPlay.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManagerPlay.registerListener(this, sensorPlay, SensorManager.SENSOR_DELAY_NORMAL);
         changeLang();
         super.onCreate(savedInstanceState);
 
@@ -309,5 +319,18 @@ public class MainActivity extends AppCompatActivity {
     private void registerUiUpdateReceiver(){
         IntentFilter filter = new IntentFilter(Broadcast_UPDATE_UI_MAIN_ACTIVITY);
         registerReceiver(uiUpdateReceiver, filter);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.values[2] < -9.8) {
+            saxMusicPlayerService.pause();
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
