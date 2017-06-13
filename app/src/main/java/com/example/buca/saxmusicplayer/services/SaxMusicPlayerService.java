@@ -286,15 +286,18 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     /*Kreiramo notifikaciju, i pozivamo je pri prvom pustanju pesme*/
     public void createNotification(PlaybackStatus playbackStatus) {
         PendingIntent play_pauseAction = null;
+        boolean swipeDeleteNotificationDisabled = true;
         //inicijalizujemo ikonicu dugmenceta za pustanje pesme na notifikaciji na 'pause'
         int notificationAction = android.R.drawable.ic_media_pause;
         if (playbackStatus == PlaybackStatus.PLAYING) {
             notificationAction = android.R.drawable.ic_media_pause;
+            swipeDeleteNotificationDisabled = true;
             //i saljemo u playbackAction argument 1, sto oznacava akciju za pauzu
             play_pauseAction = playbackAction(1);
         } else if (playbackStatus == PlaybackStatus.PAUSED) {
             //ako je pauzirana pesma onda stavljamo ikonicu dugmenceta na 'play'
             notificationAction = android.R.drawable.ic_media_play;
+            swipeDeleteNotificationDisabled = false;
             //i saljemo u playbackAction argument 0, sto oznacava akciju za play
             play_pauseAction = playbackAction(0);
         }
@@ -318,6 +321,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 intent, 0);
         mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setOngoing(swipeDeleteNotificationDisabled);
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, mBuilder.build());
     }
 
@@ -390,6 +394,7 @@ public class SaxMusicPlayerService extends Service implements MediaPlayer.OnPrep
     private void removeNotification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(NOTIFICATION_ID);
+
     }
 
 
