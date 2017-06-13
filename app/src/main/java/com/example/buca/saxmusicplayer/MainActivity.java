@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 sb.setProgress(MathUtil.getPercentage(movingTime, endTime));
             }
             runnableHandler.postDelayed(this, 1000);
+            Log.e("Hello","From the other thread");
         }
     };
 
@@ -140,14 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
-                         if(DataHolder.getResetAndPrepare()) {
-                             saxMusicPlayerService.play();
-                         }else{
-                             if(saxMusicPlayerService.isPlaying())
-                                 saxMusicPlayerService.pause();
-                             else
-                                 saxMusicPlayerService.resume();
-                         }
+                         play_pause();
                      }
                  }
         );
@@ -199,6 +194,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         registerUiUpdateReceiver();
+    }
+
+    public void play_pause() {
+        if(DataHolder.getResetAndPrepare()) {
+            saxMusicPlayerService.play();
+        }else{
+            if(saxMusicPlayerService.isPlaying())
+                saxMusicPlayerService.pause();
+            else
+                saxMusicPlayerService.resume();
+        }
     }
 
     @Override
