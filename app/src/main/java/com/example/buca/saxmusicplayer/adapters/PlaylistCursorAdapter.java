@@ -2,6 +2,7 @@ package com.example.buca.saxmusicplayer.adapters;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.widget.ResourceCursorAdapter;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.buca.saxmusicplayer.R;
+import com.example.buca.saxmusicplayer.activities.PlaylistManagerDetailsActivity;
 import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.util.DatabaseContract;
 
@@ -18,9 +20,9 @@ import com.example.buca.saxmusicplayer.util.DatabaseContract;
  * Created by Stefan on 12/06/2017.
  */
 
-public class ListCursorAdapter extends ResourceCursorAdapter {
+public class PlaylistCursorAdapter extends ResourceCursorAdapter {
 
-    public ListCursorAdapter(Context context, int layout, Cursor cursor, int flags){
+    public PlaylistCursorAdapter(Context context, int layout, Cursor cursor, int flags){
         super(context, layout, cursor, flags);
     }
 
@@ -39,7 +41,9 @@ public class ListCursorAdapter extends ResourceCursorAdapter {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("ID Playlist Edit:", v.getTag().toString());
+                Intent playlistDetails = new Intent(v.getContext(), PlaylistManagerDetailsActivity.class);
+                playlistDetails.putExtra(DatabaseContract.PlaylistTable.TABLE_NAME + DatabaseContract.PlaylistTable._ID, v.getTag().toString());
+                v.getContext().startActivity(playlistDetails);
             }
         });
 

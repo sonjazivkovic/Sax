@@ -28,4 +28,7 @@
 
     <string name="song_name"> </string>
 
+    <string name="playlist_description">Опис плејлисте</string>
+    <string name="playlist_duplicate">Плејлиста са тим називом већ постоји!</string>
+    <string name="playlist_add_to_ql">Додај на брзо бирање</string>
 </resources>
