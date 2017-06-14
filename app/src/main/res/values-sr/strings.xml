@@ -26,6 +26,6 @@
     <string name="about_app_title">Sax</string>
     <string name="about_app_text">Sax је најбољи бесплатан музички плејер на свету направљен од стране три студента ФТН-а у Новом саду. Соња, Стефан и Стојан.</string>
 
-    <string name="song_name"> Naziv pesme </string>
+    <string name="song_name"> </string>
 
 </resources>
