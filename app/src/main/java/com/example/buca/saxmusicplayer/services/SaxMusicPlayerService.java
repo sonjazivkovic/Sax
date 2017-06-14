@@ -3,18 +3,23 @@ package com.example.buca.saxmusicplayer.services;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSessionManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -30,11 +35,16 @@ import android.widget.TextView;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
+import com.example.buca.saxmusicplayer.beans.SongBean;
+import com.example.buca.saxmusicplayer.providers.SongPlaylistProvider;
+import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.util.DataHolder;
+import com.example.buca.saxmusicplayer.util.DatabaseContract;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.example.buca.saxmusicplayer.R.string.welcome_text;
 
@@ -439,5 +449,64 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
 
     }
 
+    public void loadNewPlaylist(long playlistID){
+        //ako plejer svira zaustavimo ga i postavimo flag da treba ponovo da se pripremi
+        if(player.isPlaying())
+            player.stop();
+        DataHolder.setResetAndPrepare(true);
+
+        //zatim ucitavamo pesme
+        ArrayList<SongBean> listOfSongs = new ArrayList<>();
+        ContentResolver resolver = getContentResolver();
+        Uri songsPlaylistUri = SongPlaylistProvider.CONTENT_URI_SONGSPLAYLISTS;
+
+        //ako se ne ucitavaju sve pesme onda se vraca lista SONG_IDS za datu plejlistu, u suprotnom se ucitavaju sve pesme
+        if(playlistID != -1) {
+            String[] songsInPlaylistProjection = {DatabaseContract.SongPlaylistTable.COLUMN_SONG_ID};
+            Cursor songsInPlaylistCursor = resolver.query(songsPlaylistUri, songsInPlaylistProjection, DatabaseContract.SongPlaylistTable.COLUMN_PLAYLIST_ID + " = " + playlistID,
+                    null, null);
+            if (songsInPlaylistCursor != null && songsInPlaylistCursor.moveToFirst()) {
+                //za svaki id pesme vraca se pesma iz baze i postavlja se u listu
+                do {
+                    Uri songUri = ContentUris.withAppendedId(SongProvider.CONTENT_URI_SONGS, songsInPlaylistCursor.getLong(0));
+                    Cursor songCursor = resolver.query(songUri, null, null, null, null);
+                    if (songCursor != null && songCursor.moveToFirst()) {
+                        SongBean song = new SongBean();
+                        song.setPathToFile(songCursor.getString(1));
+                        song.setTitle(songCursor.getString(2));
+                        song.setArtist(songCursor.getString(3));
+                        song.setAlbum(songCursor.getString(4));
+                        song.setYear(songCursor.getInt(5));
+                        listOfSongs.add(song);
+                    }
+                    songCursor.close();
+                } while (songsInPlaylistCursor.moveToNext());
+            }
+            songsInPlaylistCursor.close();
+        }else{
+            Uri songsUri = SongProvider.CONTENT_URI_SONGS;
+            Cursor songCursor = resolver.query(songsUri, null, null, null, null);
+            if (songCursor != null && songCursor.moveToFirst()) {
+                do {
+                    SongBean song = new SongBean();
+                    song.setPathToFile(songCursor.getString(1));
+                    song.setTitle(songCursor.getString(2));
+                    song.setArtist(songCursor.getString(3));
+                    song.setAlbum(songCursor.getString(4));
+                    song.setYear(songCursor.getInt(5));
+                    listOfSongs.add(song);
+                } while (songCursor.moveToNext());
+            }
+            songCursor.close();
+        }
+        DataHolder.setSongsToPlay(listOfSongs);
+        DataHolder.setCurrentSongPosition(0);
+        DataHolder.setActivePlaylistId(playlistID);
+        Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+        intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+        intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
+        sendBroadcast(intent);
+        createNotification(PlaybackStatus.PAUSED);
+    }
 
 }

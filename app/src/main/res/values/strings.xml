@@ -27,6 +27,8 @@
     <string name="playlist_description">Playlist description</string>
     <string name="playlist_duplicate">Playlist with that name already exist!</string>
     <string name="playlist_add_to_ql">Add to Quick Launch</string>
+    <string name="cant_delete_active_playlist">You can\'t delete active playlist. Please open another playlist and try again.</string>
+    <string name="cant_add_rem_song_active_playlist">You can\'t add or remove songs from active playlist. Please open another playlist and try again.</string>
 
     <string name="preference_file_key" translatable="false">com.example.buca.saxmusicplayer.PREFERENCE_FILE_KEY</string>
     <string name="initial_scan_done_key" translatable="false">com.example.buca.saxmusicplayer.INITIAL_SCAN_DONE_KEY</string>

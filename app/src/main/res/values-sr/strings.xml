@@ -21,6 +21,8 @@
     <string name="playlist_name">Назив плејлисте</string>
     <string name="read_storage_phone_approved">Читање екстерне меморије и стања телефона дозвољено</string>
     <string name="read_storage_phone_denied">Читање екстерне меморије и стања телефона забрањено</string>
+    <string name="cant_delete_active_playlist">Не можете обрисати активну плејлисту. Молимо пустите другу плејлисту и пробајте поново.</string>
+    <string name="cant_add_rem_song_active_playlist">Не можете додавати или брисати песме из активне плејлисте. Молимо пустите другу плејлисту и пробајте поново.</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>

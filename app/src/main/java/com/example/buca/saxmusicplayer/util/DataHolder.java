@@ -13,6 +13,8 @@ public class DataHolder {
     private static int songPosition;
     private static boolean resetAndPrepare;
 
+    private static long activePlaylistId;
+
     public static ArrayList<SongBean> getSongsToPlay(){
         return songsToPlay;
     }
@@ -47,5 +49,13 @@ public class DataHolder {
 
     public static void setResetAndPrepare(boolean newValue){
         resetAndPrepare = newValue;
+    }
+
+    public static long getActivePlaylistId() {
+        return activePlaylistId;
+    }
+
+    public static void setActivePlaylistId(long activePlaylistId) {
+        DataHolder.activePlaylistId = activePlaylistId;
     }
 }

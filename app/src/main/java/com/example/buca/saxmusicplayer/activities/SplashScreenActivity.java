@@ -42,8 +42,10 @@ public class SplashScreenActivity extends Activity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(getString(R.string.initial_scan_done_key), true);
             editor.commit();
+            DataHolder.setActivePlaylistId(-1);
         }else{
             loadSongsFromDatabase();
+            DataHolder.setActivePlaylistId(-1);
         }
         DataHolder.setCurrentSongPosition(0);
         DataHolder.setResetAndPrepare(true);
@@ -88,6 +90,7 @@ public class SplashScreenActivity extends Activity {
             }
             while (musicCursor.moveToNext());
         }
+        musicCursor.close();
 
         DataHolder.setSongsToPlay(listOfSongs);
     }
@@ -110,6 +113,7 @@ public class SplashScreenActivity extends Activity {
             }
             while (musicCursor.moveToNext());
         }
+        musicCursor.close();
 
         DataHolder.setSongsToPlay(listOfSongs);
     }

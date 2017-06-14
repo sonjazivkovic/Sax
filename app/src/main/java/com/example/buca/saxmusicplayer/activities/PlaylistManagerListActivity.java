@@ -46,6 +46,7 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
 
         setTitle(R.string.playlist_manager);
 
+        //preuzimamo sve plejliste i pravimo adapter za listu plejlisti
         playlistResolver = getContentResolver();
         playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
         playlistCursor = playlistResolver.query(playlistUri, null, null, null, null);
@@ -72,7 +73,6 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
                         ContentValues cv = new ContentValues();
                         cv.put(DatabaseContract.PlaylistTable.COLUMN_NAME, playlistName.getText().toString());
                         cv.put(DatabaseContract.PlaylistTable.COLUMN_DESCRIPTION, "");
-                        cv.put(DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL, false);
                         playlistResolver.insert(playlistUri, cv);
                         playlistCursor = playlistResolver.query(playlistUri, null, null, null, null);
                         lca.changeCursor(playlistCursor);
