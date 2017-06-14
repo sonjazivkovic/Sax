@@ -84,7 +84,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.buca.saxmusicplayer.activities.AboutActivity"
+                android:value="com.example.buca.saxmusicplayer.MainActivity"
                 />
         </activity>
 
