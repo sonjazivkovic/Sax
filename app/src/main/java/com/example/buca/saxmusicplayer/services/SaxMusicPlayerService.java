@@ -125,6 +125,8 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         player.start();
         DataHolder.setResetAndPrepare(false);
         Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+        intent.putExtra(MainActivity.Broadcast_INIT_SEEK_BAR, true);
+        intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
         sendBroadcast(intent);
     }
 
@@ -204,8 +206,8 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
                         if(callOngoing) {
                             if (!playbackStopedByUser) {
                                 player.start();
-                                callOngoing = false;
                             }
+                            callOngoing = false;
                         }
                         break;
                 }
@@ -262,6 +264,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         else{
             Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
             intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+            intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
             sendBroadcast(intent);
         }
     }
@@ -274,6 +277,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         else{
             Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
             intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+            intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
             sendBroadcast(intent);
         }
     }
