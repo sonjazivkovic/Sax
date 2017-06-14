@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.recreate();
             else
                 initSeekBar();
+                setSongName();
         }
     };
 
@@ -355,6 +356,13 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    private void setSongName() {
+
+        TextView tv1 = (TextView)findViewById(R.id.songName);
+
+        tv1.setText(DataHolder.getCurrentSong().getTitle());
     }
 
 }
