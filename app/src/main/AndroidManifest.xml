@@ -77,6 +77,17 @@
                 />
         </activity>
 
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/about_app"
+            android:parentActivityName=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.buca.saxmusicplayer.activities.AboutActivity"
+                />
+        </activity>
+
         <service android:name="com.example.buca.saxmusicplayer.services.SaxMusicPlayerService"/>
 
         <provider
