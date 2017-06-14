@@ -19,4 +19,7 @@
     <string name="lang_en">Енглески</string>
     <string name="lang_sr">Српски</string>
     <string name="playlist_name">Назив плејлисте</string>
+    <string name="read_storage_phone_approved">Читање екстерне меморије и стања телефона дозвољено</string>
+    <string name="read_storage_phone_denied">Читање екстерне меморије и стања телефона забрањено</string>
+
 </resources>
