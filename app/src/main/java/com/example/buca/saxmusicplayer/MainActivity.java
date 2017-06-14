@@ -1,5 +1,6 @@
 package com.example.buca.saxmusicplayer;
 
+import com.example.buca.saxmusicplayer.activities.AboutActivity;
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
 import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.recreate();
             else
                 initSeekBar();
+                setSongName();
         }
     };
 
@@ -267,6 +269,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
+            case R.id.action_about:
+                Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(aboutIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -350,6 +356,13 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    private void setSongName() {
+
+        TextView tv1 = (TextView)findViewById(R.id.songName);
+
+        tv1.setText(DataHolder.getCurrentSong().getTitle());
     }
 
 }

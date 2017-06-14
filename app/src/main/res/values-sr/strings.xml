@@ -22,4 +22,10 @@
     <string name="read_storage_phone_approved">Читање екстерне меморије и стања телефона дозвољено</string>
     <string name="read_storage_phone_denied">Читање екстерне меморије и стања телефона забрањено</string>
 
+    <string name="about_app">О апликацији</string>
+    <string name="about_app_title">Sax</string>
+    <string name="about_app_text">Sax је најбољи бесплатан музички плејер на свету направљен од стране три студента ФТН-а у Новом саду. Соња, Стефан и Стојан.</string>
+
+    <string name="song_name"> Naziv pesme </string>
+
 </resources>

@@ -26,10 +26,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.widget.TextView;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.util.DataHolder;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -228,6 +231,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         player.reset();
         try {
             player.setDataSource(DataHolder.getCurrentSong().getPathToFile());
+
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("FILE NOT FOUND", "Song is not on the path specified!", e);
