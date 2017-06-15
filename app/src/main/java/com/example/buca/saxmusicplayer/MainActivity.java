@@ -4,14 +4,17 @@ import com.example.buca.saxmusicplayer.activities.AboutActivity;
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
 import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity;
-import com.example.buca.saxmusicplayer.adapters.ImageAdapter;
+import com.example.buca.saxmusicplayer.adapters.CustomGridCursor;
+import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
+import com.example.buca.saxmusicplayer.util.DatabaseContract;
 import com.example.buca.saxmusicplayer.util.MathUtil;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,6 +22,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,6 +37,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -65,10 +71,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
+    private ContentResolver playlistResolver;
+    private  Uri playlistUri;
+    private Cursor playlistCursor;
+    private CustomGridCursor cgc;
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
 
-    private GridView gridView;
-
+    private GridView grid;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -138,8 +147,14 @@ public class MainActivity extends AppCompatActivity {
         changeLang();
         setContentView(R.layout.activity_main);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this));
+        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
+        playlistResolver = getContentResolver();
+        String where = DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL + " = 1";
+        playlistCursor = playlistResolver.query(playlistUri, null, where, null, null);
+
+        cgc = new CustomGridCursor(this, R.layout.grid_single, playlistCursor, 0);
+        grid=(GridView)findViewById(R.id.gridview);
+        grid.setAdapter(cgc);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -311,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
         }
         unregisterReceiver(uiUpdateReceiver);
         runnableHandler.removeCallbacks(updateSongTime);
+        playlistCursor.close();
     }
 
     private void initSeekBar() {
