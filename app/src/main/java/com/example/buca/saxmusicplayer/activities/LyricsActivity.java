@@ -60,11 +60,11 @@ public class LyricsActivity extends AppCompatActivity {
             songArtist = parts[0];
             songTitle = parts[1];
         }
-
+/*
         if(songTitle.equals("<unknown>")) {
             twLyricsText.setText(R.string.song_title_is_unknown);
         }
-
+*/
 /*
         songArtist = "metallica";
         songTitle = "unforgiven";
