@@ -43,18 +43,28 @@ public class LyricsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(R.string.lyrics);
-/*
+
         songArtist = DataHolder.getCurrentSong().getArtist();
 
         songTitle = DataHolder.getCurrentSong().getTitle();
-        */
+
+        if(songArtist.equals("<unknown>")){
+
+            String parts[] = songTitle.split("-");
+
+            songArtist = parts[0];
+            songTitle = parts[1];
+        }
+
+
 
         TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
 
         TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
-
+/*
         songArtist = "metallica";
         songTitle = "unforgiven";
+ */
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
