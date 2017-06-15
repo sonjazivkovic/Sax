@@ -462,6 +462,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         //ako plejer svira zaustavimo ga i postavimo flag da treba ponovo da se pripremi
         if(player.isPlaying())
             player.stop();
+        playbackStopedByUser = true;
         DataHolder.setResetAndPrepare(true);
 
         //zatim ucitavamo pesme
