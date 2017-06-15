@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
     public static String Broadcast_UPDATE_UI_MAIN_ACTIVITY = "com.example.buca.saxmusicplayer.broadcast.UPDATE_UI_MAIN_ACTIVITY";
     public static String Broadcast_RESET_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.RESET_SEEK_BAR";
     public static String Broadcast_RESET_MAIN_ACTIVITY = "com.example.buca.saxmusicplayer.broadcast.RESET_MAIN_ACTIVITY";
+    public static String Broadcast_UPDATE_SONG_INFO = "com.example.buca.saxmusicplayer.broadcast.UPDATE_SONG_INFO";
+    public static String Broadcast_INIT_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.INIT_SEEK_BAR";
+    public static String Broadcast_SONG_PAUSE = "com.example.buca.saxmusicplayer.broadcast.SONG_PAUSE";
+    public static String Broadcast_SONG_RESUME = "com.example.buca.saxmusicplayer.broadcast.SONG_RESUME";
     private Handler runnableHandler = new Handler();
     private TextView movingTimeText;
     private TextView endTimeText;
@@ -85,13 +89,26 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver uiUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false))
+            if (intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false)){
                 resetSeekBar();
-            else if(intent.getBooleanExtra(Broadcast_RESET_MAIN_ACTIVITY, false))
+            }
+            if(intent.getBooleanExtra(Broadcast_RESET_MAIN_ACTIVITY, false)) {
                 MainActivity.this.recreate();
-            else
+            }
+            if(intent.getBooleanExtra(Broadcast_INIT_SEEK_BAR, false)) {
                 initSeekBar();
+            }
+            if(intent.getBooleanExtra(Broadcast_UPDATE_SONG_INFO, false)){
                 setSongName();
+            }
+            if(intent.getBooleanExtra(Broadcast_SONG_PAUSE, false)){
+                //promena dugmeta i mozda jos nesto kasnije bude trebalo
+                playPause.setImageResource(R.drawable.main_pause_icon);
+            }
+            if(intent.getBooleanExtra(Broadcast_SONG_RESUME, false)){
+                //promena dugmeta i mozda jos nesto kasnije bude trebalo
+                playPause.setImageResource(R.drawable.play);
+            }
         }
     };
 
@@ -211,15 +228,12 @@ public class MainActivity extends AppCompatActivity {
     public void play_pause() {
         if(DataHolder.getResetAndPrepare()) {
             saxMusicPlayerService.play();
-            playPause.setImageResource(R.drawable.play);
         }else{
             if(saxMusicPlayerService.isPlaying()) {
                 saxMusicPlayerService.pause();
-                playPause.setImageResource(R.drawable.main_pause_icon);
             }
             else {
                 saxMusicPlayerService.resume();
-                playPause.setImageResource(R.drawable.play);
             }
         }
     }
