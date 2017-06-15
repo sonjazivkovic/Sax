@@ -20,7 +20,7 @@ public class ChartLyricsClient {
     public String query( String artist, String title) {
         try {
 
-            URL url = new URL(URLEncoder.encode(API_URL + "artist=" + artist + "&song=" + title, "UTF-8"));
+            URL url = new URL(API_URL + "artist=" + URLEncoder.encode(artist, "UTF-8") + "&song=" + URLEncoder.encode(title, "UTF-8"));
 
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {

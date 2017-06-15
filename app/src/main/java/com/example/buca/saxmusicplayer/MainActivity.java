@@ -69,15 +69,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
-<<<<<<< HEAD
 
-=======
     private ContentResolver playlistResolver;
     private  Uri playlistUri;
     private Cursor playlistCursor;
     private CustomGridCursorAdapter cgc;
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
->>>>>>> 2b0b78734fc637f492d6f253d2ee90552c4f2647
+
 
     private GridView grid;
 
