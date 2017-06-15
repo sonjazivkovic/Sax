@@ -38,29 +38,53 @@ public class LyricsActivity extends AppCompatActivity {
 
         client = new ChartLyricsClient();
 
-        songArtist = DataHolder.getCurrentSong().getArtist();
-        songTitle = DataHolder.getCurrentSong().getTitle();
 
-        TextView twSongTitle = (TextView)findViewById(R.id.lyrics_act_song_title);
+            songArtist = DataHolder.getCurrentSong().getArtist();
 
-        TextView lyricsText = (TextView)findViewById(R.id.lyrics_act_song_lyrics);
+            songTitle = DataHolder.getCurrentSong().getTitle();
 
-        /**
-         * Ispisuje autora i naziv pesme.
-         */
-        try {
-            twSongTitle.setText(client.getSongLyrics(songArtist,songTitle).artist + " - " + client.getSongLyrics(songArtist,songTitle).title);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
 
-        /**
-         * Ispisuje tekst pesme.
-         */
-        try {
-            lyricsText.setText(client.getSongLyrics(songArtist,songTitle).lyrics);
-        } catch (Exception e) {
-            e.printStackTrace();
+            TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
+
+        //pronalazenje lyrics-a
+        if(!songArtist.equals("<unknown>") && !songTitle.equals("<unknown>")) {
+
+            /**
+             * Ispisuje autora i naziv pesme.
+             */
+            try {
+                twSongTitle.setText(client.getSongLyrics(songArtist, songTitle).artist + " - " + client.getSongLyrics(songArtist, songTitle).title);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            /**
+             * Ispisuje tekst pesme.
+             */
+            try {
+                twLyricsText.setText(client.getSongLyrics(songArtist, songTitle).lyrics);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            String[] parts = songTitle.split("-");
+
+            try {
+                twSongTitle.setText(songTitle);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            /**
+             * Ispisuje tekst pesme.
+             */
+            try {
+                twLyricsText.setText(client.getSongLyrics(parts[0], parts[1]).lyrics);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
