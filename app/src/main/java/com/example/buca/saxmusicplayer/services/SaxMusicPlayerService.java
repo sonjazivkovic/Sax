@@ -60,7 +60,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
     private PhoneStateListener phoneStateListener;
     private TelephonyManager telephonyManager;
     private boolean callOngoing = false;
-    private boolean playbackStopedByUser = false;
+    private boolean playbackStopedByUser = true;
     private Sensor sensorPlay;
     private SensorManager sensorManagerPlay;
 
@@ -208,7 +208,9 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
                     case TelephonyManager.CALL_STATE_OFFHOOK:
                         //zvoni telefon - zaustavi reprodukciju
                     case TelephonyManager.CALL_STATE_RINGING:
-                        player.pause();
+                        if (!playbackStopedByUser) {
+                            player.pause();
+                        }
                         callOngoing = true;
                         break;
                     //nema poziva - nastavi reprodukciju
@@ -240,6 +242,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
     }
 
     public void play(){
+        playbackStopedByUser = false;
         player.reset();
         try {
             player.setDataSource(DataHolder.getCurrentSong().getPathToFile());

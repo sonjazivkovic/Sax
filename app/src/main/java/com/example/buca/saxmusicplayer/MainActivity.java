@@ -4,7 +4,7 @@ import com.example.buca.saxmusicplayer.activities.AboutActivity;
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
 import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity;
-import com.example.buca.saxmusicplayer.adapters.CustomGridCursor;
+import com.example.buca.saxmusicplayer.adapters.CustomGridCursorAdapter;
 import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
@@ -37,7 +37,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private ContentResolver playlistResolver;
     private  Uri playlistUri;
     private Cursor playlistCursor;
-    private CustomGridCursor cgc;
+    private CustomGridCursorAdapter cgc;
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
 
     private GridView grid;
@@ -148,14 +147,7 @@ public class MainActivity extends AppCompatActivity {
         changeLang();
         setContentView(R.layout.activity_main);
 
-        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
-        playlistResolver = getContentResolver();
-        String where = DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL + " = 1";
-        playlistCursor = playlistResolver.query(playlistUri, null, where, null, null);
 
-        cgc = new CustomGridCursor(this, R.layout.grid_single, playlistCursor, 0);
-        grid=(GridView)findViewById(R.id.gridview);
-        grid.setAdapter(cgc);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -267,6 +259,14 @@ public class MainActivity extends AppCompatActivity {
             Intent playMusicIntent = new Intent(this, SaxMusicPlayerService.class);
             startService(playMusicIntent);
             bindService(playMusicIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
+            playlistResolver = getContentResolver();
+            String where = DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL + " = 1";
+            playlistCursor = playlistResolver.query(playlistUri, null, where, null, null);
+
+            cgc = new CustomGridCursorAdapter(this, R.layout.grid_single, playlistCursor, 0);
+            grid=(GridView)findViewById(R.id.gridview);
+            grid.setAdapter(cgc);
         }
     }
 
@@ -399,6 +399,9 @@ public class MainActivity extends AppCompatActivity {
         TextView tv1 = (TextView)findViewById(R.id.songName);
 
         tv1.setText(DataHolder.getCurrentSong().getTitle());
+    }
+    public void loadPlaylist(long playlistID){
+        saxMusicPlayerService.loadNewPlaylist(playlistID);
     }
 
 }
