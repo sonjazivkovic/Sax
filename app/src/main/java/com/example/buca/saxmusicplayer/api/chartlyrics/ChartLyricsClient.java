@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class ChartLyricsClient {
 
@@ -19,7 +20,8 @@ public class ChartLyricsClient {
     public String query( String artist, String title) {
         try {
 
-            URL url = new URL(API_URL + "artist=" + artist + "&song=" + title);
+            URL url = new URL(URLEncoder.encode(API_URL + "artist=" + artist + "&song=" + title, "UTF-8"));
+
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
