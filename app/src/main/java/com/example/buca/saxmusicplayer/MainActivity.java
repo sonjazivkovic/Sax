@@ -103,9 +103,11 @@ public class MainActivity extends AppCompatActivity {
             }
             if(intent.getBooleanExtra(Broadcast_SONG_PAUSE, false)){
                 //promena dugmeta i mozda jos nesto kasnije bude trebalo
+                playPause.setImageResource(R.drawable.main_pause_icon);
             }
             if(intent.getBooleanExtra(Broadcast_SONG_RESUME, false)){
                 //promena dugmeta i mozda jos nesto kasnije bude trebalo
+                playPause.setImageResource(R.drawable.play);
             }
         }
     };
@@ -226,15 +228,12 @@ public class MainActivity extends AppCompatActivity {
     public void play_pause() {
         if(DataHolder.getResetAndPrepare()) {
             saxMusicPlayerService.play();
-            playPause.setImageResource(R.drawable.play);
         }else{
             if(saxMusicPlayerService.isPlaying()) {
                 saxMusicPlayerService.pause();
-                playPause.setImageResource(R.drawable.main_pause_icon);
             }
             else {
                 saxMusicPlayerService.resume();
-                playPause.setImageResource(R.drawable.play);
             }
         }
     }
