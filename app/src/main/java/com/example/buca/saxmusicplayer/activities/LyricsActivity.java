@@ -53,22 +53,23 @@ public class LyricsActivity extends AppCompatActivity {
 
         songTitle = DataHolder.getCurrentSong().getTitle();
 
-        if(songArtist.equals("<unknown>")){
+        if(songArtist.equals("<unknown>") && !songTitle.equals("<unknown>")){
+            if(songTitle.contains("-")) {
+                String parts[] = songTitle.split("-");
 
-            String parts[] = songTitle.split("-");
-
-            songArtist = parts[0];
-            songTitle = parts[1];
+                songArtist = parts[0];
+                songTitle = parts[1];
+            } else {
+                twLyricsText.setText(R.string.song_title_is_unknown);
+            }
+        } else {
+            twLyricsText.setText(R.string.song_title_is_unknown);
         }
 
         if(songTitle.equals("<unknown>")) {
             twLyricsText.setText(R.string.song_title_is_unknown);
         }
 
-/*
-        songArtist = "metallica";
-        songTitle = "unforgiven";
- */
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
