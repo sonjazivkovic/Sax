@@ -12,14 +12,11 @@ import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.api.chartlyrics.ChartLyricsClient;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 import static android.os.Build.VERSION_CODES.M;
+import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 /**
  * Created by Stefan on 04/05/2017.
@@ -46,17 +43,18 @@ public class LyricsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(R.string.lyrics);
-
+/*
         songArtist = DataHolder.getCurrentSong().getArtist();
 
         songTitle = DataHolder.getCurrentSong().getTitle();
+        */
 
         TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
 
         TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
 
-        //songArtist = "metallica";
-        //songTitle = "unforgiven";
+        songArtist = "metallica";
+        songTitle = "unforgiven";
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
@@ -69,7 +67,9 @@ public class LyricsActivity extends AppCompatActivity {
 
             String response = client.query(songArtist,songTitle);
 
-            twLyricsText.setText(response);
+            String lyrics = StringUtils.substringBetween(response, "<Lyric>", "</Lyric>");
+
+            twLyricsText.setText(lyrics);
 
             twSongTitle.setText(songArtist);
 
