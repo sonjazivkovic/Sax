@@ -96,7 +96,7 @@ public class PlaylistManagerDetailsActivity extends AppCompatActivity {
         playlistDescription.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT){
                     ContentValues cv = new ContentValues();
                     cv.put(DatabaseContract.PlaylistTable.COLUMN_DESCRIPTION, v.getText().toString());
                     resolver.update(playlistUri, cv, null, null);
