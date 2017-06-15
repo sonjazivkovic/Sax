@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -40,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private SaxMusicPlayerService saxMusicPlayerService;
     private boolean serviceBound = false;
+    private AlertDialog scanDialog;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -96,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     builder = new AlertDialog.Builder(preference.getContext());
                 }
-                builder.setTitle(R.string.scan_device)
+                scanDialog = builder.setTitle(R.string.scan_device)
                         .setMessage(R.string.long_operation)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -108,8 +110,8 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-
+                        .create();
+                scanDialog.show();
                 return true;
             }
         });
@@ -137,6 +139,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbindService(serviceConnection);
+        if(scanDialog != null)
+            scanDialog.dismiss();
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -175,6 +179,8 @@ public class SettingsActivity extends AppCompatActivity {
             //sprecavamo korisnika da klikce po aplikaciji dok se ne zavrsi skeniranje
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            //privremeno disablujemo rotaciju
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         }
 
         @Override
@@ -182,6 +188,8 @@ public class SettingsActivity extends AppCompatActivity {
             //kada se zavrsi operacija sklanjamo progres bar i pustamo korisnika da klikce po ekranu
             progressDialog.dismiss();
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            //ponovo palimo rotaciju
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
 
         private void scanDeviceFunc(){
