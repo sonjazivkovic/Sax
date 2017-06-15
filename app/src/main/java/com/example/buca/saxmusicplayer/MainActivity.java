@@ -4,6 +4,7 @@ import com.example.buca.saxmusicplayer.activities.AboutActivity;
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
 import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity;
+import com.example.buca.saxmusicplayer.adapters.ImageAdapter;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 import com.example.buca.saxmusicplayer.util.MathUtil;
@@ -54,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     public static String Broadcast_RESET_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.RESET_SEEK_BAR";
     public static String Broadcast_RESET_MAIN_ACTIVITY = "com.example.buca.saxmusicplayer.broadcast.RESET_MAIN_ACTIVITY";
     public static String Broadcast_UPDATE_SONG_INFO = "com.example.buca.saxmusicplayer.broadcast.UPDATE_SONG_INFO";
-    public static String Broadcast_INIT_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.INIT_SEEK_BAR";
     public static String Broadcast_SONG_PAUSE = "com.example.buca.saxmusicplayer.broadcast.SONG_PAUSE";
     public static String Broadcast_SONG_RESUME = "com.example.buca.saxmusicplayer.broadcast.SONG_RESUME";
     private Handler runnableHandler = new Handler();
