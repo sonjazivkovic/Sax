@@ -23,6 +23,11 @@
         android:summary="@string/scan_device_summary" />
 
     <Preference
+        android:key="clean_device"
+        android:title="@string/clean_device"
+        android:summary="@string/clean_device_summary" />
+
+    <Preference
         android:key="open_playlist_manager"
         android:title="@string/playlist_manager"
         android:summary="@string/playlist_manager_summary">
