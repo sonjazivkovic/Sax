@@ -15,6 +15,7 @@ import com.example.buca.saxmusicplayer.util.DataHolder;
 
 import org.apache.commons.lang3.StringUtils;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.os.Build.VERSION_CODES.M;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
@@ -44,6 +45,10 @@ public class LyricsActivity extends AppCompatActivity {
 
         setTitle(R.string.lyrics);
 
+        TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
+
+        TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
+
         songArtist = DataHolder.getCurrentSong().getArtist();
 
         songTitle = DataHolder.getCurrentSong().getTitle();
@@ -56,11 +61,10 @@ public class LyricsActivity extends AppCompatActivity {
             songTitle = parts[1];
         }
 
+        if(songTitle.equals("<unknown>")) {
+            twLyricsText.setText(R.string.song_title_is_unknown);
+        }
 
-
-        TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
-
-        TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
 /*
         songArtist = "metallica";
         songTitle = "unforgiven";
