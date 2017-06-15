@@ -32,11 +32,15 @@ public class DataHolder {
     public static void nextSong(){
         if(songPosition < songsToPlay.size() - 1)
             songPosition++;
+        else if(songPosition == songsToPlay.size() - 1)
+            songPosition = 0;
     }
 
     public static void previousSong(){
         if(songPosition > 0)
             songPosition--;
+        else if(songPosition == 0)
+            songPosition = songsToPlay.size() - 1;
     }
 
     public static SongBean getCurrentSong(){

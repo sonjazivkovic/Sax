@@ -135,8 +135,8 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         player.start();
         DataHolder.setResetAndPrepare(false);
         Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
-        intent.putExtra(MainActivity.Broadcast_INIT_SEEK_BAR, true);
         intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
+        intent.putExtra(MainActivity.Broadcast_SONG_RESUME, true);
         sendBroadcast(intent);
     }
 
@@ -257,12 +257,18 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         player.pause();
         playbackStopedByUser = true;
         createNotification(PlaybackStatus.PAUSED);
+        Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+        intent.putExtra(MainActivity.Broadcast_SONG_PAUSE, true);
+        sendBroadcast(intent);
     }
 
     public void resume(){
         player.start();
         playbackStopedByUser = false;
         createNotification(PlaybackStatus.PLAYING);
+        Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+        intent.putExtra(MainActivity.Broadcast_SONG_RESUME, true);
+        sendBroadcast(intent);
     }
 
     /*ff i bf prvo proveravaju da li je u toku reprodukcija, ukoliko nije samo se menja redosled pesme i postavlja se flag da treba resetovati plejer za pustanje nove*/
@@ -295,7 +301,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
     /*premotavanje stopira reprodukciju pa se zbog toga poziva start odmah nakon premotavanja*/
     public void seekTo(int seekPosition){
         player.seekTo(seekPosition);
-        player.start();
+        resume();
     }
 
     public int getDuration(){

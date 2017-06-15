@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     public static String Broadcast_RESET_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.RESET_SEEK_BAR";
     public static String Broadcast_RESET_MAIN_ACTIVITY = "com.example.buca.saxmusicplayer.broadcast.RESET_MAIN_ACTIVITY";
     public static String Broadcast_UPDATE_SONG_INFO = "com.example.buca.saxmusicplayer.broadcast.UPDATE_SONG_INFO";
-    public static String Broadcast_INIT_SEEK_BAR = "com.example.buca.saxmusicplayer.broadcast.INIT_SEEK_BAR";
     public static String Broadcast_SONG_PAUSE = "com.example.buca.saxmusicplayer.broadcast.SONG_PAUSE";
     public static String Broadcast_SONG_RESUME = "com.example.buca.saxmusicplayer.broadcast.SONG_RESUME";
     private Handler runnableHandler = new Handler();
@@ -88,8 +87,13 @@ public class MainActivity extends AppCompatActivity {
             serviceBound = true;
 
             /*ukoliko se u plejeru nalazi pesma treba inicijalizovati seekbar - ovo je zbog toga sto se restartuje aktivnost pri rotaciji ekrana, da se ne izgubi seekbar progres*/
-            if (!DataHolder.getResetAndPrepare())
-                initSeekBar();
+            if(!DataHolder.getResetAndPrepare()) {
+                initSeekBar(saxMusicPlayerService.isPlaying());
+            }
+            //isto i za dugme, moramo ovde proveriti zato sto pre ovoga ne postoji saxMusicPlayerService
+            if(saxMusicPlayerService.isPlaying()) {
+                playPause.setImageResource(R.drawable.main_pause_icon);
+            }
         }
 
         @Override
@@ -101,25 +105,22 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver uiUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false)) {
+            if (intent.getBooleanExtra(Broadcast_RESET_SEEK_BAR, false)){
                 resetSeekBar();
             }
-            if (intent.getBooleanExtra(Broadcast_RESET_MAIN_ACTIVITY, false)) {
+            if(intent.getBooleanExtra(Broadcast_RESET_MAIN_ACTIVITY, false)) {
                 MainActivity.this.recreate();
             }
-            if (intent.getBooleanExtra(Broadcast_INIT_SEEK_BAR, false)) {
-                initSeekBar();
-            }
-            if (intent.getBooleanExtra(Broadcast_UPDATE_SONG_INFO, false)) {
+            if(intent.getBooleanExtra(Broadcast_UPDATE_SONG_INFO, false)){
                 setSongName();
             }
-            if (intent.getBooleanExtra(Broadcast_SONG_PAUSE, false)) {
-                //promena dugmeta i mozda jos nesto kasnije bude trebalo
-                playPause.setImageResource(R.drawable.main_pause_icon);
-            }
-            if (intent.getBooleanExtra(Broadcast_SONG_RESUME, false)) {
-                //promena dugmeta i mozda jos nesto kasnije bude trebalo
+            if(intent.getBooleanExtra(Broadcast_SONG_PAUSE, false)){
+                runnableHandler.removeCallbacks(updateSongTime);
                 playPause.setImageResource(R.drawable.play);
+            }
+            if(intent.getBooleanExtra(Broadcast_SONG_RESUME, false)){
+                initSeekBar(true);
+                playPause.setImageResource(R.drawable.main_pause_icon);
             }
         }
     };
@@ -129,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             int movingTime = saxMusicPlayerService.getCurrentPosition();
             int endTime = saxMusicPlayerService.getDuration();
-            if (movingTime != -1 && endTime != -1) {
+            if(movingTime != -1 && endTime != -1) {
                 movingTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) movingTime),
                         TimeUnit.MILLISECONDS.toSeconds((long) movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) movingTime))));
                 SeekBar sb = (SeekBar) findViewById(R.id.seekBar);
                 sb.setProgress(MathUtil.getPercentage(movingTime, endTime));
             }
             runnableHandler.postDelayed(this, 1000);
-            Log.e("Hello", "From the other thread");
+            Log.e("Hello","From the other thread");
         }
     };
 
@@ -159,12 +160,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        menuItems = new String[]{getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.choose_playlist)};
+        menuItems = new String[] { getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.choose_playlist) };
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuItems));
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
             }
@@ -180,21 +181,21 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(R.string.app_name);
 
-        movingTimeText = (TextView) findViewById(R.id.movingTime);
-        endTimeText = (TextView) findViewById(R.id.endTime);
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        movingTimeText = (TextView)findViewById(R.id.movingTime);
+        endTimeText = (TextView)findViewById(R.id.endTime);
+        seekBar = (SeekBar)findViewById(R.id.seekBar);
 
-        playPause = (ImageButton) findViewById(R.id.button_play_pause);
+        playPause = (ImageButton)findViewById(R.id.button_play_pause);
 
-        playNextSong = (ImageButton) findViewById(R.id.button_next);
-        playPrevSong = (ImageButton) findViewById(R.id.button_prev);
+        playNextSong = (ImageButton)findViewById(R.id.button_next);
+        playPrevSong = (ImageButton)findViewById(R.id.button_prev);
         playPause.setOnClickListener(
                 new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        play_pause();
-                    }
-                }
+                     @Override
+                     public void onClick(View v) {
+                         play_pause();
+                     }
+                 }
         );
 
         playNextSong.setOnClickListener(new View.OnClickListener() {
@@ -212,21 +213,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /*provera da li postoji pesma u plejeru, ukoliko ne postoji onemoguciti kornisniku da klikce po seekbaru*/
-        if (DataHolder.getResetAndPrepare())
+        if(DataHolder.getResetAndPrepare())
             seekBar.setEnabled(false);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    int endTime = saxMusicPlayerService.getDuration();
-                    saxMusicPlayerService.seekTo(MathUtil.getNumberFromPercentage(progress, endTime));
-                }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 saxMusicPlayerService.pause();
-                runnableHandler.removeCallbacks(updateSongTime);
                 playPause.setEnabled(false);
                 playNextSong.setEnabled(false);
                 playPrevSong.setEnabled(false);
@@ -236,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int endTime = saxMusicPlayerService.getDuration();
                 saxMusicPlayerService.seekTo(MathUtil.getNumberFromPercentage(seekBar.getProgress(), endTime));
-                runnableHandler.postDelayed(updateSongTime, 1000);
                 playPause.setEnabled(true);
                 playNextSong.setEnabled(true);
                 playPrevSong.setEnabled(true);
@@ -248,10 +243,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void play_pause() {
-        if (DataHolder.getResetAndPrepare()) {
+        if(DataHolder.getResetAndPrepare()) {
             saxMusicPlayerService.play();
-        } else {
-            if (saxMusicPlayerService.isPlaying()) {
+        }else{
+            if(saxMusicPlayerService.isPlaying()) {
                 saxMusicPlayerService.pause();
             } else {
                 saxMusicPlayerService.resume();
@@ -268,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!serviceBound) {
+        if(!serviceBound) {
             Intent playMusicIntent = new Intent(this, SaxMusicPlayerService.class);
             startService(playMusicIntent);
             bindService(playMusicIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -292,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        switch (item.getItemId()) {
+        switch(item.getItemId()){
             case R.id.action_lyrics:
                 Intent lyricsIntent = new Intent(MainActivity.this, LyricsActivity.class);
                 startActivity(lyricsIntent);
@@ -318,10 +313,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         /*proverava se da li se aktivnost unistava ili se samo menja konfiguracija*/
-        if (isFinishing() && serviceBound) {
+        if(isFinishing() && serviceBound) {
             unbindService(serviceConnection);
             saxMusicPlayerService.stopSelf();
-        } else if (isChangingConfigurations() && serviceBound) {
+        }else if(isChangingConfigurations() && serviceBound){
             unbindService(serviceConnection);
         }
         unregisterReceiver(uiUpdateReceiver);
@@ -329,11 +324,10 @@ public class MainActivity extends AppCompatActivity {
         playlistCursor.close();
     }
 
-    private void initSeekBar() {
-        runnableHandler.removeCallbacks(updateSongTime);
+    private void initSeekBar(boolean runUIUpdateThread) {
         int movingTime = saxMusicPlayerService.getCurrentPosition();
         int endTime = saxMusicPlayerService.getDuration();
-        if (movingTime != -1 && endTime != -1) {
+        if(movingTime != -1 && endTime != -1) {
             movingTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) movingTime),
                     TimeUnit.MILLISECONDS.toSeconds((long) movingTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) movingTime))));
             endTimeText.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) endTime),
@@ -342,7 +336,10 @@ public class MainActivity extends AppCompatActivity {
             seekBar.setProgress(MathUtil.getPercentage(movingTime, endTime));
             seekBar.setEnabled(true);
         }
-        runnableHandler.postDelayed(updateSongTime, 1000);
+        if(runUIUpdateThread) {
+            runnableHandler.removeCallbacks(updateSongTime);
+            runnableHandler.postDelayed(updateSongTime, 1000);
+        }
     }
 
     /*Ovde citamo iz Shared preferences fajla koji je jezik izabran od strane korisnika, i koristimo taj jezik pri pokretanju Main aktivnosti*/
@@ -365,18 +362,18 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setEnabled(false);
     }
 
-    private void registerUiUpdateReceiver() {
+    private void registerUiUpdateReceiver(){
         IntentFilter filter = new IntentFilter(Broadcast_UPDATE_UI_MAIN_ACTIVITY);
         registerReceiver(uiUpdateReceiver, filter);
     }
 
     /*Ovim proveravamo da li uredjaj dozvoljava citanje sa eksterne kartice i stanja telefona nasoj aplikaciji*/
     private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE},
                     MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE);
-        }
+                 }
     }
 
     /*Ovde proveravamo da li smo dobili dozvolu, za sada sam samo napisala poruku i za slucaj da jesmo i za slucaj da nismo*/
@@ -399,10 +396,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setSongName() {
 
-        TextView tv1 = (TextView) findViewById(R.id.songName);
+        TextView tv1 = (TextView)findViewById(R.id.songName);
 
         tv1.setText(DataHolder.getCurrentSong().getTitle());
     }
-
 
 }
