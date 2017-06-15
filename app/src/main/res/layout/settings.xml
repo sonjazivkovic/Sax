@@ -12,6 +12,19 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/CustomPopupTheme"
         />
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
     
     <FrameLayout
         android:id="@+id/preference_fragment_container"
