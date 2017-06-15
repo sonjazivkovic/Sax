@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
-    private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
+
 
     private GridView gridView;
 
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkPermissions();
+
         changeLang();
         setContentView(R.layout.activity_main);
 
@@ -351,32 +351,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(uiUpdateReceiver, filter);
     }
 
-    /*Ovim proveravamo da li uredjaj dozvoljava citanje sa eksterne kartice i stanja telefona nasoj aplikaciji*/
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE},
-                    MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE);
-                 }
-    }
 
-    /*Ovde proveravamo da li smo dobili dozvolu, za sada sam samo napisala poruku i za slucaj da jesmo i za slucaj da nismo*/
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, getResources().getString(R.string.read_storage_phone_approved), Toast.LENGTH_SHORT).show();
-
-                } else {
-                    Toast.makeText(MainActivity.this, getResources().getString(R.string.read_storage_phone_denied), Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                return;
-            }
-        }
-    }
 
     private void setSongName() {
 

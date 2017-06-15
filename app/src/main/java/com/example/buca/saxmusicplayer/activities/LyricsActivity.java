@@ -1,14 +1,25 @@
 package com.example.buca.saxmusicplayer.activities;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.api.chartlyrics.ChartLyricsClient;
 import com.example.buca.saxmusicplayer.util.DataHolder;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static android.os.Build.VERSION_CODES.M;
 
 /**
  * Created by Stefan on 04/05/2017.
@@ -16,13 +27,13 @@ import com.example.buca.saxmusicplayer.util.DataHolder;
 
 public class LyricsActivity extends AppCompatActivity {
 
-    private TextView lyricsText;
+
+    private String API_URL = "http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?";
 
     private String songArtist;
     private String songTitle;
+
     private ChartLyricsClient client;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -36,57 +47,37 @@ public class LyricsActivity extends AppCompatActivity {
 
         setTitle(R.string.lyrics);
 
-        client = new ChartLyricsClient();
+        songArtist = DataHolder.getCurrentSong().getArtist();
 
+        songTitle = DataHolder.getCurrentSong().getTitle();
 
-            songArtist = DataHolder.getCurrentSong().getArtist();
+        TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
 
-            songTitle = DataHolder.getCurrentSong().getTitle();
+        TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
 
-            TextView twSongTitle = (TextView) findViewById(R.id.lyrics_act_song_title);
+        //songArtist = "metallica";
+        //songTitle = "unforgiven";
 
-            TextView twLyricsText = (TextView) findViewById(R.id.lyrics_act_song_lyrics);
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-        //pronalazenje lyrics-a
-        if(!songArtist.equals("<unknown>") && !songTitle.equals("<unknown>")) {
+            client = new ChartLyricsClient();
 
-            /**
-             * Ispisuje autora i naziv pesme.
-             */
-            try {
-                twSongTitle.setText(client.getSongLyrics(songArtist, songTitle).artist + " - " + client.getSongLyrics(songArtist, songTitle).title);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            String response = client.query(songArtist,songTitle);
 
-            /**
-             * Ispisuje tekst pesme.
-             */
-            try {
-                twLyricsText.setText(client.getSongLyrics(songArtist, songTitle).lyrics);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
+            twLyricsText.setText(response);
 
-            String[] parts = songTitle.split("-");
+            twSongTitle.setText(songArtist);
 
-            try {
-                twSongTitle.setText(songTitle);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            /**
-             * Ispisuje tekst pesme.
-             */
-            try {
-                twLyricsText.setText(client.getSongLyrics(parts[0], parts[1]).lyrics);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
 
+
     }
+
+
 }
