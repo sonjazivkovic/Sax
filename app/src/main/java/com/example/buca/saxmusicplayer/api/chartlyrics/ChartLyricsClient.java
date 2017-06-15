@@ -2,6 +2,8 @@ package com.example.buca.saxmusicplayer.api.chartlyrics;
 
 /**
  * Created by stojan.mitric on 6/15/2017.
+ *
+ * ChartLyricsClient klasa za uspostavljanje konekcije ka ChartLyrics api -ju.
  */
 import com.example.buca.saxmusicplayer.api.common.HttpGet;
 
@@ -18,6 +20,10 @@ public class ChartLyricsClient {
     private static final Pattern PATTERN_LYRICS = Pattern.compile("<Lyric>(.*)</Lyric>", Pattern.MULTILINE | Pattern.DOTALL);
     private static final Pattern PATTERN_SONG = Pattern.compile("<LyricSong>(.*)</LyricSong>", Pattern.MULTILINE | Pattern.DOTALL);
     private static final Pattern PATTERN_ARTIST = Pattern.compile("<LyricArtist>(.*)</LyricArtist>", Pattern.MULTILINE | Pattern.DOTALL);
+
+    /**
+     * getSongLyrics Metoda salje get request api-ju sa nazivom izvodjaca i nazivom pesme.
+     */
 
     public static LyricsResponse getSongLyrics(String artist, String title) throws IOException, Exception {
         String lyricsXml = HttpGet.get(BASE_URL, "artist=" + URLEncoder.encode(artist, "UTF-8") + "&song=" + URLEncoder.encode(title, "UTF-8"), true);
@@ -42,6 +48,10 @@ public class ChartLyricsClient {
 
         return response;
     }
+
+    /**
+     * Klasa koja sadrži podatke o autoru, nazivu i tekstu pesme.
+     */
 
     public static class LyricsResponse {
         public String lyrics;

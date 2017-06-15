@@ -29,7 +29,6 @@ public class LyricsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lyrics);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.lyrics_toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,12 +45,18 @@ public class LyricsActivity extends AppCompatActivity {
 
         TextView lyricsText = (TextView)findViewById(R.id.lyrics_act_song_lyrics);
 
+        /**
+         * Ispisuje autora i naziv pesme.
+         */
         try {
             twSongTitle.setText(client.getSongLyrics(songArtist,songTitle).artist + " - " + client.getSongLyrics(songArtist,songTitle).title);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        /**
+         * Ispisuje tekst pesme.
+         */
         try {
             lyricsText.setText(client.getSongLyrics(songArtist,songTitle).lyrics);
         } catch (Exception e) {

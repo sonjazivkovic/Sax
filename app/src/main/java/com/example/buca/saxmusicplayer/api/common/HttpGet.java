@@ -14,18 +14,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * HTTP GET helper
+ * HTTP GET helper klasa
  */
 public class HttpGet {
 
     private static final String TAG = "HttpGet";
 
     /**
-     * Downloads the data from the provided URL.
-     * @param inUrl The URL to get from
-     * @param query The query field. '?' + query will be appended automatically, and the query data
-     *              MUST be encoded properly.
-     * @return A string with the data grabbed from the URL
+     * Dobavlja podatke sa prosledjenog URL-a.
+     * @param inUrl Prosledjeni URL.
+     * @param query Prosledjeni upit. '?' + parametri se dodaje automatski, vrednosti parametara moraju biti encoded.
+     * @return Vraća podatke iz prosleđenog URL-a.
      */
     public static String get(String inUrl, String query, boolean cached)
             throws IOException, Exception {
@@ -33,11 +32,10 @@ public class HttpGet {
     }
 
     /**
-     * Downloads the data from the provided URL.
-     * @param inUrl The URL to get from
-     * @param query The query field. '?' + query will be appended automatically, and the query data
-     *              MUST be encoded properly.
-     * @return A byte array of the data
+     * Dobavlja podatke sa prosledjenog URL-a.
+     * @param inUrl Prosledjeni URL.
+     * @param query Prosledjeni upit. '?' + parametri se dodaje automatski, vrednosti parametara moraju biti encoded.
+     * @return Vraća niz bajtova iz prosleđenog URL-a.
      */
     public static byte[] getBytes(String inUrl, String query, boolean cached)
             throws IOException, Exception {
@@ -54,12 +52,12 @@ public class HttpGet {
         urlConnection.addRequestProperty("Cache-Control", "max-stale=" + maxStale);
         try {
             final int status = urlConnection.getResponseCode();
-            // MusicBrainz returns 503 Unavailable on rate limit errors. Parse the JSON anyway.
+            // parsiranje statusa
             if (status == HttpURLConnection.HTTP_OK) {
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 int contentLength = urlConnection.getContentLength();
                 if (contentLength <= 0) {
-                    // No length? Let's allocate 100KB.
+                    // alociranje content lengtha 100KB.
                     contentLength = 100 * 1024;
                 }
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(contentLength);
@@ -67,6 +65,7 @@ public class HttpGet {
                 BufferedInputStream bis = new BufferedInputStream(in);
                 int read;
 
+                //hedlovanje statusa responsa
                 while ((read = bis.read(buffer, 0, buffer.length)) > 0) {
                     baos.write(buffer, 0, read);
                 }
@@ -82,7 +81,7 @@ public class HttpGet {
                     || status == HttpURLConnection.HTTP_MOVED_PERM
                     || status == 307 /* HTTP/1.1 TEMPORARY REDIRECT */
                     || status == HttpURLConnection.HTTP_SEE_OTHER) {
-                // We've been redirected, follow the new URL
+                // u slučaju redirekcije, prati novi URL
                 final String followUrl = urlConnection.getHeaderField("Location");
                 Log.e(TAG, "Redirected to: " +  followUrl);
                 return getBytes(followUrl, "", cached);
