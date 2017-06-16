@@ -8,7 +8,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimaryDark"
         android:weightSum="1">
 
     <android.support.v7.widget.Toolbar
@@ -41,6 +41,15 @@
         android:text="Placeholder For Song Details.\n Lorem ipsum dolor sit amet,\n consectetur adipiscing elit, sed do eiusmod\n tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud\n exercitation ullamco laboris nisi ut aliquip\n ex ea commodo consequat. Duis aute irure dolor\n in reprehenderit in voluptate velit esse cillum dolore\n eu fugiat nulla pariatur. Excepteur sint\n occaecat cupidatat non proident, sunt\n in culpa qui officia deserunt mollit anim id est laborum."
         android:textColor="@color/colorAccent"
         />
+
+        <TextView
+            android:id="@+id/album_cover_lbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/album_cover"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorAccent"/>
 
         <ImageView
             android:id="@+id/det_rat_album_cover"
