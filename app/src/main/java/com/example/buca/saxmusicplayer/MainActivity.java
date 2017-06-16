@@ -376,7 +376,10 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv1 = (TextView)findViewById(R.id.songName);
 
-        tv1.setText(DataHolder.getCurrentSong().getTitle());
+        if(!DataHolder.getCurrentSong().getTitle().equals("EMPTY"))
+            tv1.setText(DataHolder.getCurrentSong().getTitle());
+        else
+            tv1.setText(R.string.empty_list_of_songs);
     }
     public void loadPlaylist(long playlistID){
         saxMusicPlayerService.loadNewPlaylist(playlistID);
