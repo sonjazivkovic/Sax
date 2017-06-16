@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +20,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.Vibrator;
+import android.preference.Preference;
 import android.provider.ContactsContract;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -32,6 +34,7 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
@@ -257,7 +260,16 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         } catch (IOException e) {
             if(!DataHolder.getCurrentSong().getTitle().equals("EMPTY")){
                 DataHolder.nextSong();
-                play();
+                DataHolder.setResetAndPrepare(true);
+                Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+                intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+                intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
+                intent.putExtra(MainActivity.Broadcast_SONG_PAUSE, true);
+                sendBroadcast(intent);
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(getString(R.string.user_should_run_cleaner), true);
+                editor.commit();
             }
         }
     }
@@ -470,6 +482,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
             player.stop();
         playbackStopedByUser = true;
         DataHolder.setResetAndPrepare(true);
+        removeNotification();
 
         //zatim ucitavamo pesme
         ArrayList<SongBean> listOfSongs = new ArrayList<>();

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.view.WindowManager;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
+import com.example.buca.saxmusicplayer.providers.SongPlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
@@ -41,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private SaxMusicPlayerService saxMusicPlayerService;
     private boolean serviceBound = false;
-    private AlertDialog scanDialog;
+    private AlertDialog alertDialog;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -98,7 +100,7 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     builder = new AlertDialog.Builder(preference.getContext());
                 }
-                scanDialog = builder.setTitle(R.string.scan_device)
+                alertDialog = builder.setTitle(R.string.scan_device)
                         .setMessage(R.string.long_operation)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -111,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .create();
-                scanDialog.show();
+                alertDialog.show();
                 return true;
             }
         });
@@ -120,10 +122,34 @@ public class SettingsActivity extends AppCompatActivity {
         cleanDevice.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
-                return false;
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(preference.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(preference.getContext());
+                }
+                alertDialog = builder.setTitle(R.string.clean_device)
+                        .setMessage(R.string.long_operation)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                new LongOperation().execute("clean_device");
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create();
+                alertDialog.show();
+                return true;
             }
         });
+
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        if(preferences.getBoolean(getString(R.string.user_should_run_cleaner), false)){
+            cleanDevice.setIcon(android.R.drawable.ic_dialog_alert);
+        }
     }
 
     @Override
@@ -139,8 +165,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbindService(serviceConnection);
-        if(scanDialog != null)
-            scanDialog.dismiss();
+        if(alertDialog != null)
+            alertDialog.dismiss();
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -161,10 +187,9 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             if(params[0].equals("scan_device"))
-                scanDeviceFunc();
+                return scanDeviceFunc();
             else
-                cleanDeviceFunc();
-            return null;
+                return cleanDeviceFunc();
         }
 
         @Override
@@ -185,6 +210,16 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            if(result.equals("scan_device_load")){
+                saxMusicPlayerService.loadNewPlaylist(-1);
+            }else if(result.equals("clean_device_load")){
+                saxMusicPlayerService.loadNewPlaylist(DataHolder.getActivePlaylistId());
+                SharedPreferences preferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(getString(R.string.user_should_run_cleaner), false);
+                editor.commit();
+                recreate();
+            }
             //kada se zavrsi operacija sklanjamo progres bar i pustamo korisnika da klikce po ekranu
             progressDialog.dismiss();
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -192,7 +227,7 @@ public class SettingsActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
 
-        private void scanDeviceFunc(){
+        private String scanDeviceFunc(){
             ContentResolver musicResolver = getContentResolver();
             Uri songsUri = SongProvider.CONTENT_URI_SONGS;
             Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -223,11 +258,37 @@ public class SettingsActivity extends AppCompatActivity {
             musicCursor.close();
             //ako je inicijalno bila ucitana lista svih pesama ponovo je ucitavamo u suprotnom nema potrebe zato sto nove pesme sigurno ne postoje u nekoj od korisnickih plejlista
             if(newSongsAvailable && DataHolder.getActivePlaylistId() == -1)
-                saxMusicPlayerService.loadNewPlaylist(-1);
+                return "scan_device_load";
+            return "do_nothing";
         }
 
-        private void cleanDeviceFunc(){
+        private String cleanDeviceFunc(){
+            ContentResolver musicResolver = getContentResolver();
+            Uri songsUri = SongProvider.CONTENT_URI_SONGS;
+            Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            Uri songPlaylistUri = SongPlaylistProvider.CONTENT_URI_SONGSPLAYLISTS;
+            String[] projection = {DatabaseContract.SongTable._ID, DatabaseContract.SongTable.COLUMN_PATH};
+            Cursor musicCursor = musicResolver.query(songsUri, projection, null, null, null);
+            boolean thereWereRemovedSongs = false;
 
+            if(musicCursor!=null && musicCursor.moveToFirst()){
+                do {
+                    //removing from db
+                    String[] selectionArgs = {musicCursor.getString(1)};
+                    Cursor songExistOnSD = musicResolver.query(musicUri, null, MediaStore.Audio.Media.DATA + " = ?", selectionArgs, null, null);
+                    if(songExistOnSD == null || !songExistOnSD.moveToFirst()) {
+                        musicResolver.delete(songPlaylistUri, DatabaseContract.SongPlaylistTable.COLUMN_SONG_ID + " = " + musicCursor.getString(0), null);
+                        musicResolver.delete(songsUri, DatabaseContract.SongTable._ID + " = " + musicCursor.getString(0), null);
+                        thereWereRemovedSongs = true;
+                    }
+                    songExistOnSD.close();
+                }
+                while (musicCursor.moveToNext());
+            }
+
+            if(thereWereRemovedSongs)
+                return "clean_device_load";
+            return "do_nothing";
         }
     }
 
