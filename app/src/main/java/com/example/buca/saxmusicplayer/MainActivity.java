@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*Ovde citamo iz Shared preferences fajla koji je jezik izabran od strane korisnika, i koristimo taj jezik pri pokretanju Main aktivnosti*/
     public void changeLang() {
-        SharedPreferences sp = getSharedPreferences("language_preference", MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         String languageToLoad = sp.getString("language_preference", "en"); // your language
         Configuration config = getBaseContext().getResources().getConfiguration();
         Locale locale = new Locale(languageToLoad);

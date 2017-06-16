@@ -175,7 +175,7 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             /*Izabran jezik ce biti smesten u Shared preference fajl*/
             PreferenceManager pm = getPreferenceManager();
-            pm.setSharedPreferencesName("language_preference");
+            pm.setSharedPreferencesName(getResources().getString(R.string.preference_file_key));
             addPreferencesFromResource(R.xml.preferences);
         }
     }
