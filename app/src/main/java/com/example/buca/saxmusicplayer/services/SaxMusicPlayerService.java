@@ -477,14 +477,16 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
 
     }
 
-    public void loadNewPlaylist(long playlistID){
+    public void onPreExecuteLoadNewPlaylist(){
         //ako plejer svira zaustavimo ga i postavimo flag da treba ponovo da se pripremi
         if(player.isPlaying())
             player.stop();
         playbackStopedByUser = true;
         DataHolder.setResetAndPrepare(true);
         removeNotification();
+    }
 
+    public void doInBackgroundLoadNewPlaylist(long playlistID){
         //zatim ucitavamo pesme
         ArrayList<SongBean> listOfSongs = new ArrayList<>();
         ContentResolver resolver = getContentResolver();
@@ -541,6 +543,9 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         DataHolder.setSongsToPlay(listOfSongs);
         DataHolder.setCurrentSongPosition(0);
         DataHolder.setActivePlaylistId(playlistID);
+    }
+
+    public void onPostExecuteLoadNewPlaylist(){
         Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
         intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
         intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
@@ -548,6 +553,12 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         intent.putExtra(MainActivity.Broadcast_UPDATE_PLAYLIST_NAME, true);
         sendBroadcast(intent);
         createNotification(PlaybackStatus.PAUSED);
+    }
+
+    public void loadNewPlaylist(long playlistID){
+        this.onPreExecuteLoadNewPlaylist();
+        this.doInBackgroundLoadNewPlaylist(playlistID);
+        this.onPostExecuteLoadNewPlaylist();
     }
 
 }
