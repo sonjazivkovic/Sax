@@ -1,5 +1,8 @@
 package com.example.buca.saxmusicplayer.util;
 
+import android.content.res.Resources;
+
+import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.beans.SongBean;
 
 import java.util.ArrayList;
@@ -44,7 +47,18 @@ public class DataHolder {
     }
 
     public static SongBean getCurrentSong(){
-        return songsToPlay.get(songPosition);
+        if(songsToPlay.size() == 0){
+            SongBean emptyList = new SongBean();
+            emptyList.setPathToFile("");
+            emptyList.setTitle("EMPTY");
+            emptyList.setYear(0);
+            emptyList.setAlbum("EMPTY");
+            emptyList.setArtist("EMPTY");
+            return emptyList;
+        }else{
+            return songsToPlay.get(songPosition);
+        }
+
     }
 
     public static boolean getResetAndPrepare(){

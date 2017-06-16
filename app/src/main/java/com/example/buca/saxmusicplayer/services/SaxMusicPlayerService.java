@@ -91,7 +91,6 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         initPlayer();
         requestAudioFocus();
         callStateListener();
-
     }
 
     /*Ova metoda se poziva kad aktivnost posalje zahtev servisu za pokretanje.
@@ -158,9 +157,11 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         switch (focusChange){
             /*kada dobijemo fokus pustamo plejer da svira*/
             case AudioManager.AUDIOFOCUS_GAIN:
-                if(!player.isPlaying()){
-                    if (!playbackStopedByUser)
-                         player.start();
+                if(!player.isPlaying() && !playbackStopedByUser){
+                    if (DataHolder.getResetAndPrepare())
+                        this.play();
+                    else
+                        player.start();
                 }
                 player.setVolume(1.0f, 1.0f);
                 break;
@@ -172,6 +173,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
                     DataHolder.setResetAndPrepare(true);
                     Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
                     intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+                    intent.putExtra(MainActivity.Broadcast_SONG_PAUSE, true);
                     sendBroadcast(intent);
 
                 }
@@ -238,7 +240,11 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
     }
 
     public boolean isPlaying(){
-        return player.isPlaying();
+        if(player != null)
+            return player.isPlaying();
+        else {
+            return false;
+        }
     }
 
     public void play(){
@@ -246,14 +252,14 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         player.reset();
         try {
             player.setDataSource(DataHolder.getCurrentSong().getPathToFile());
-
+            player.prepareAsync();
+            createNotification(PlaybackStatus.PLAYING);
         } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("FILE NOT FOUND", "Song is not on the path specified!", e);
+            if(!DataHolder.getCurrentSong().getTitle().equals("EMPTY")){
+                DataHolder.nextSong();
+                play();
+            }
         }
-        player.prepareAsync();
-        createNotification(PlaybackStatus.PLAYING);
-
     }
 
     public void pause(){
