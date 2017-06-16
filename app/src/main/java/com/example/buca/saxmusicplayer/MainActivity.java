@@ -35,12 +35,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -166,6 +168,25 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         drawerLayout.addDrawerListener(drawerToggle);
+        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    final int position, long id) {
+
+                String item = drawerList.getItemAtPosition(position).toString();
+
+                switch (item) {
+                    case "All songs":
+                        saxMusicPlayerService.loadNewPlaylist(-1);
+                        break;
+                    case "Default playlist":
+                        break;
+                    case "Choose playlist":
+                        break;
+                }
+            }
+        });
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -324,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
         playlistCursor.close();
     }
 
+
     private void initSeekBar(boolean runUIUpdateThread) {
         int movingTime = saxMusicPlayerService.getCurrentPosition();
         int endTime = saxMusicPlayerService.getDuration();
@@ -393,5 +415,5 @@ public class MainActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
-
+    
 }
