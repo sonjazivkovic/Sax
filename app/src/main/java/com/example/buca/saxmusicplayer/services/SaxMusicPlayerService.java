@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.beans.SongBean;
+import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongPlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.util.DataHolder;
@@ -512,6 +513,13 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
                 } while (songsInPlaylistCursor.moveToNext());
             }
             songsInPlaylistCursor.close();
+
+            String[] playlistProjection = {DatabaseContract.PlaylistTable.COLUMN_NAME};
+            Cursor playlistCursor = resolver.query(PlaylistProvider.CONTENT_URI_PLAYLISTS, playlistProjection, DatabaseContract.PlaylistTable._ID + " = " + playlistID,
+                    null, null);
+            playlistCursor.moveToFirst();
+            DataHolder.setActivePlaylistName(playlistCursor.getString(0));
+            playlistCursor.close();
         }else{
             Uri songsUri = SongProvider.CONTENT_URI_SONGS;
             Cursor songCursor = resolver.query(songsUri, null, null, null, null);
@@ -527,6 +535,8 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
                 } while (songCursor.moveToNext());
             }
             songCursor.close();
+
+            DataHolder.setActivePlaylistName(getResources().getString(R.string.all_songs));
         }
         DataHolder.setSongsToPlay(listOfSongs);
         DataHolder.setCurrentSongPosition(0);
@@ -535,6 +545,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
         intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
         intent.putExtra(MainActivity.Broadcast_SONG_PAUSE, true);
+        intent.putExtra(MainActivity.Broadcast_UPDATE_PLAYLIST_NAME, true);
         sendBroadcast(intent);
         createNotification(PlaybackStatus.PAUSED);
     }

@@ -17,6 +17,7 @@ public class DataHolder {
     private static boolean resetAndPrepare;
 
     private static long activePlaylistId;
+    private static String activePlaylistName;
 
     public static ArrayList<SongBean> getSongsToPlay(){
         return songsToPlay;
@@ -75,5 +76,13 @@ public class DataHolder {
 
     public static void setActivePlaylistId(long activePlaylistId) {
         DataHolder.activePlaylistId = activePlaylistId;
+    }
+
+    public static String getActivePlaylistName() {
+        return activePlaylistName;
+    }
+
+    public static void setActivePlaylistName(String activePlaylistName) {
+        DataHolder.activePlaylistName = activePlaylistName;
     }
 }

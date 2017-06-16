@@ -1,8 +1,10 @@
 package com.example.buca.saxmusicplayer.adapters;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.widget.ResourceCursorAdapter;
@@ -59,6 +61,10 @@ public class PlaylistCursorAdapter extends ResourceCursorAdapter {
                     Uri songPlaylistUri = SongPlaylistProvider.CONTENT_URI_SONGSPLAYLISTS;
                     resolver.delete(songPlaylistUri, DatabaseContract.SongPlaylistTable.COLUMN_PLAYLIST_ID + " = " + v.getTag().toString(), null);
                     resolver.delete(playlistUri, DatabaseContract.PlaylistTable._ID + " = " + v.getTag().toString(), null);
+                    SharedPreferences preferences = v.getContext().getSharedPreferences(v.getContext().getString(R.string.preference_file_key), Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("default_playlist_preference", "none");
+                    editor.commit();
                     Cursor newCursor = resolver.query(playlistUri, null, null, null, null);
                     changeCursor(newCursor);
                 }else{

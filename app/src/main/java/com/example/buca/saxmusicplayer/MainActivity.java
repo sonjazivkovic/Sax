@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public static String Broadcast_UPDATE_SONG_INFO = "com.example.buca.saxmusicplayer.broadcast.UPDATE_SONG_INFO";
     public static String Broadcast_SONG_PAUSE = "com.example.buca.saxmusicplayer.broadcast.SONG_PAUSE";
     public static String Broadcast_SONG_RESUME = "com.example.buca.saxmusicplayer.broadcast.SONG_RESUME";
+    public static String Broadcast_UPDATE_PLAYLIST_NAME = "com.example.buca.saxmusicplayer.broadcast.UPDATE_PLAYLIST_NAME";
     private Handler runnableHandler = new Handler();
     private TextView movingTimeText;
     private TextView endTimeText;
@@ -120,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
             if(intent.getBooleanExtra(Broadcast_SONG_RESUME, false)){
                 initSeekBar(true);
                 playPause.setImageResource(R.drawable.main_pause_icon);
+            }
+            if(intent.getBooleanExtra(Broadcast_UPDATE_PLAYLIST_NAME, false)){
+                setPlaylistName();
             }
         }
     };
@@ -230,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setSongName();
+        setPlaylistName();
         registerUiUpdateReceiver();
     }
 
@@ -392,6 +397,11 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.dismiss();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }
+
+    private void setPlaylistName(){
+        TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
+        playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
     }
 
 }
