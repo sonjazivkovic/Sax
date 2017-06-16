@@ -29,6 +29,7 @@
     <string name="yes">Да</string>
     <string name="no">Не</string>
     <string name="please_wait">Учитавање...</string>
+    <string name="empty_list_of_songs">У овој листи нема песама на располагању. Молимо промените плејлисту или покрените поновно скенирање уређаја.</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>
