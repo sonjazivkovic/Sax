@@ -23,13 +23,14 @@
     <string name="read_storage_phone_denied">Читање екстерне меморије и стања телефона забрањено</string>
     <string name="cant_delete_active_playlist">Не можете обрисати активну плејлисту. Молимо пустите другу плејлисту и пробајте поново.</string>
     <string name="cant_add_rem_song_active_playlist">Не можете додавати или брисати песме из активне плејлисте. Молимо пустите другу плејлисту и пробајте поново.</string>
-    <string name="clean_device">Чишћење уређаја</string>
+    <string name="clean_device">Чишћење песама</string>
     <string name="clean_device_summary">Уколико сте обрисали неке песме из екстерне меморије телефона, покрените ову опцију да обришете те песме из плејлисти.</string>
     <string name="long_operation">Ова операција може потрајати. Да ли сте сигурни да желите да наставите?</string>
     <string name="yes">Да</string>
     <string name="no">Не</string>
     <string name="please_wait">Учитавање...</string>
     <string name="empty_list_of_songs">У овој листи нема песама на располагању. Молимо промените плејлисту или покрените поновно скенирање уређаја.</string>
+    <string name="no_song_on_sd">Претходна песма није пронађена.</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>

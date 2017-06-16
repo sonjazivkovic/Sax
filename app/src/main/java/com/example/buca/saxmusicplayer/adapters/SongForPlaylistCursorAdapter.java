@@ -42,6 +42,9 @@ public class SongForPlaylistCursorAdapter extends ResourceCursorAdapter {
         String selection = DatabaseContract.SongPlaylistTable.COLUMN_PLAYLIST_ID + " = " + playlistID + " and "
                 + DatabaseContract.SongPlaylistTable.COLUMN_SONG_ID + " = " + cursor.getLong(cursor.getColumnIndex(DatabaseContract.SongTable._ID));
         Cursor songExistInPlaylistCursor = resolver.query(songPlaylistUri, null, selection, null, null);
+
+        //kada se skroluje list view da se ne selektuju pogresne pesme, zato prvo decekiramo, pa ako treba cekiramo
+        songInPlaylist.setChecked(false);
         if(songExistInPlaylistCursor != null && songExistInPlaylistCursor.moveToFirst())
             songInPlaylist.setChecked(true);
         songExistInPlaylistCursor.close();
@@ -62,6 +65,12 @@ public class SongForPlaylistCursorAdapter extends ResourceCursorAdapter {
                         resolver.delete(songPlaylistUri, where, null);
                     }
                 }else{
+                    boolean checked = ((CheckBox) v).isChecked();
+                    if (checked) {
+                        ((CheckBox) v).setChecked(false);
+                    }else{
+                        ((CheckBox) v).setChecked(true);
+                    }
                     Toast.makeText(v.getContext(), R.string.cant_add_rem_song_active_playlist, Toast.LENGTH_LONG).show();
                 }
             }

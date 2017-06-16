@@ -29,16 +29,18 @@
     <string name="playlist_add_to_ql">Add to Quick Launch</string>
     <string name="cant_delete_active_playlist">You can\'t delete active playlist. Please open another playlist and try again.</string>
     <string name="cant_add_rem_song_active_playlist">You can\'t add or remove songs from active playlist. Please open another playlist and try again.</string>
-    <string name="clean_device">Clean Your Device</string>
+    <string name="clean_device">Clean Your Songs</string>
     <string name="clean_device_summary">If you removed some songs from external storage, run this option to clean your playlists.</string>
     <string name="long_operation">This operation can take some time to finish. Are you sure you want to continue?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="please_wait">Loading...</string>
     <string name="empty_list_of_songs">There is no songs to play. Please load another playlist, or rescan device.</string>
+    <string name="no_song_on_sd">Skipping to the next song. Previous song not found.</string>
 
     <string name="preference_file_key" translatable="false">com.example.buca.saxmusicplayer.PREFERENCE_FILE_KEY</string>
     <string name="initial_scan_done_key" translatable="false">com.example.buca.saxmusicplayer.INITIAL_SCAN_DONE_KEY</string>
+    <string name="user_should_run_cleaner" translatable="false">com.example.buca.saxmusicplayer.USER_SHOULD_RUN_CLEANER</string>
 
     <string name="about_app">About application</string>
     <string name="about_app_title">Sax</string>
