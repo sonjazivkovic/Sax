@@ -11,6 +11,7 @@ import com.example.buca.saxmusicplayer.util.DataHolder;
 import com.example.buca.saxmusicplayer.util.DatabaseContract;
 import com.example.buca.saxmusicplayer.util.MathUtil;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -32,6 +34,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private Cursor playlistCursor;
     private CustomGridCursorAdapter cgc;
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
+    private ProgressDialog progressDialog;
 
 
     private GridView grid;
@@ -375,7 +379,19 @@ public class MainActivity extends AppCompatActivity {
             tv1.setText(R.string.empty_list_of_songs);
     }
     public void loadPlaylist(long playlistID){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(R.string.please_wait);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         saxMusicPlayerService.loadNewPlaylist(playlistID);
+        progressDialog.dismiss();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
 }
