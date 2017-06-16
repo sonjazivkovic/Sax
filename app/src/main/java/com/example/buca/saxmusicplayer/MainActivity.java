@@ -31,6 +31,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -178,15 +179,15 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     final int position, long id) {
 
-                String item = drawerList.getItemAtPosition(position).toString();
-
-                switch (item) {
-                    case "All songs":
-                        saxMusicPlayerService.loadNewPlaylist(-1);
+                switch (position) {
+                    case 0:
+                        loadPlaylist(-1);
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.choose_all_songs), Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(Gravity.LEFT);
                         break;
-                    case "Default playlist":
+                    case 1:
                         break;
-                    case "Choose playlist":
+                    case 2:
                         break;
                 }
             }
@@ -406,24 +407,26 @@ public class MainActivity extends AppCompatActivity {
             tv1.setText(R.string.empty_list_of_songs);
     }
     public void loadPlaylist(long playlistID){
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle(R.string.please_wait);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        saxMusicPlayerService.loadNewPlaylist(playlistID);
-        progressDialog.dismiss();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        if(DataHolder.getActivePlaylistId() != playlistID) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle(R.string.please_wait);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            saxMusicPlayerService.loadNewPlaylist(playlistID);
+            progressDialog.dismiss();
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
     }
 
     private void setPlaylistName(){
         TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
         playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
     }
-    
+
 }
