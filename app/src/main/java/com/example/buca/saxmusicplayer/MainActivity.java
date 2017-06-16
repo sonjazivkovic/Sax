@@ -24,6 +24,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -408,7 +409,28 @@ public class MainActivity extends AppCompatActivity {
     }
     public void loadPlaylist(long playlistID){
         if(DataHolder.getActivePlaylistId() != playlistID) {
-            progressDialog = new ProgressDialog(this);
+            new LongOperation().execute(playlistID);
+        }
+    }
+
+    private void setPlaylistName(){
+        TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
+        playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
+    }
+
+    private class LongOperation extends AsyncTask<Long, Void, Long> {
+
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected Long doInBackground(Long... params) {
+            saxMusicPlayerService.doInBackgroundLoadNewPlaylist(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setTitle(R.string.please_wait);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setIndeterminate(true);
@@ -417,16 +439,18 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-            saxMusicPlayerService.loadNewPlaylist(playlistID);
+            saxMusicPlayerService.onPreExecuteLoadNewPlaylist();
+        }
+
+
+        @Override
+        protected void onPostExecute(Long playlistID) {
+            saxMusicPlayerService.onPostExecuteLoadNewPlaylist();
             progressDialog.dismiss();
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
-    }
 
-    private void setPlaylistName(){
-        TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
-        playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
     }
 
 }
