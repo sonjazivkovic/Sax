@@ -31,6 +31,8 @@
     <string name="please_wait">Учитавање...</string>
     <string name="empty_list_of_songs">У овој листи нема песама на располагању. Молимо промените плејлисту или покрените поновно скенирање уређаја.</string>
     <string name="no_song_on_sd">Претходна песма није пронађена.</string>
+    <string name="default_playlist_default_string">Ниједна</string>
+    <string name="active_playlist_name">Плејлиста коју слушате:\u0020</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>

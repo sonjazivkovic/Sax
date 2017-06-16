@@ -28,6 +28,7 @@ import android.view.WindowManager;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
+import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongPlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
@@ -44,6 +45,10 @@ public class SettingsActivity extends AppCompatActivity {
     private SaxMusicPlayerService saxMusicPlayerService;
     private boolean serviceBound = false;
     private AlertDialog alertDialog;
+    private ContentResolver playlistResolver;
+    private Uri playlistUri;
+    private Cursor playlistCursor;
+    private SettingsFragment sf;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -74,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
         setTitle(R.string.settings);
 
         //Display the fragment as the main content
-        SettingsFragment sf = new SettingsFragment();
+        sf = new SettingsFragment();
         getFragmentManager().beginTransaction().replace(R.id.preference_fragment_container, sf).commit();
         getFragmentManager().executePendingTransactions();
 
@@ -159,6 +164,41 @@ public class SettingsActivity extends AppCompatActivity {
             Intent playMusicIntent = new Intent(this, SaxMusicPlayerService.class);
             bindService(playMusicIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         }
+
+        playlistResolver = getContentResolver();
+        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
+        playlistCursor = playlistResolver.query(playlistUri, null, null, null, null);
+        ListPreference defaultPlaylist = (ListPreference) sf.findPreference("default_playlist_preference");
+        CharSequence[] entries;
+        CharSequence[] entriValues;
+        if(playlistCursor != null && playlistCursor.moveToFirst()){
+            entries = new CharSequence[playlistCursor.getCount() + 1];
+            entriValues = new CharSequence[playlistCursor.getCount() + 1];
+            entries[0] = getResources().getString(R.string.default_playlist_default_string);
+            entriValues[0] = "none";
+            int i = 1;
+            do{
+                entriValues[i] = Long.toString(playlistCursor.getLong(playlistCursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
+                entries[i] = playlistCursor.getString(playlistCursor.getColumnIndex(DatabaseContract.PlaylistTable.COLUMN_NAME));
+                i++;
+            }while(playlistCursor.moveToNext());
+
+        }else{
+            entries = new CharSequence[1];
+            entriValues = new CharSequence[1];
+            entries[0] = getResources().getString(R.string.default_playlist_default_string);
+            entriValues[0] = "none";
+        }
+        defaultPlaylist.setEntries(entries);
+        defaultPlaylist.setEntryValues(entriValues);
+        if(defaultPlaylist.getValue() == null)
+            defaultPlaylist.setValue(entriValues[0].toString());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        playlistCursor.close();
     }
 
     @Override

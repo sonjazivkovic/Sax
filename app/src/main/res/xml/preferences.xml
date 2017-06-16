@@ -13,9 +13,7 @@
         android:key="default_playlist_preference"
         android:title="@string/default_playlist_preference"
         android:summary="@string/default_playlist_summary"
-        android:dialogTitle="@string/default_playlist_preference"
-        android:entries="@array/default_playlist_entries"
-        android:entryValues="@array/default_playlist_entry_values" />
+        android:dialogTitle="@string/default_playlist_preference" />
 
     <Preference
         android:key="scan_device"

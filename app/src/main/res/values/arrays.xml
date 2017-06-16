@@ -8,10 +8,4 @@
         <item>@string/lang_en_value</item>
         <item>@string/lang_sr_value</item>
     </string-array>
-    <string-array name="default_playlist_entries">
-        <item>None</item>
-    </string-array>
-    <string-array name="default_playlist_entry_values">
-        <item>none</item>
-    </string-array>
 </resources>

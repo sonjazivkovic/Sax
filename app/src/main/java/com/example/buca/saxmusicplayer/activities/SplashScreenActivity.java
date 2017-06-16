@@ -3,6 +3,7 @@ package com.example.buca.saxmusicplayer.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.beans.SongBean;
+import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
+import com.example.buca.saxmusicplayer.providers.SongPlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 import com.example.buca.saxmusicplayer.util.DatabaseContract;
@@ -52,7 +55,6 @@ public class SplashScreenActivity extends Activity {
             DataHolder.setActivePlaylistId(-1);
         }else{
             loadSongsFromDatabase();
-            DataHolder.setActivePlaylistId(-1);
         }
         DataHolder.setCurrentSongPosition(0);
         DataHolder.setResetAndPrepare(true);
@@ -105,22 +107,59 @@ public class SplashScreenActivity extends Activity {
     private void loadSongsFromDatabase(){
         ArrayList<SongBean> listOfSongs = new ArrayList<>();
         ContentResolver musicResolver = getContentResolver();
-        Uri songsUri = SongProvider.CONTENT_URI_SONGS;
-        Cursor musicCursor = musicResolver.query(songsUri, null, null, null, null);
 
-        if(musicCursor!=null && musicCursor.moveToFirst()) {
-            do {
-                SongBean song = new SongBean();
-                song.setPathToFile(musicCursor.getString(1));
-                song.setTitle(musicCursor.getString(2));
-                song.setArtist(musicCursor.getString(3));
-                song.setAlbum(musicCursor.getString(4));
-                song.setYear(musicCursor.getInt(5));
-                listOfSongs.add(song);
+        String defaultPlaylist = preferences.getString("default_playlist_preference", "none");
+        if(!defaultPlaylist.equals("none")) {
+            String[] songsInPlaylistProjection = {DatabaseContract.SongPlaylistTable.COLUMN_SONG_ID};
+            Uri songsPlaylistUri = SongPlaylistProvider.CONTENT_URI_SONGSPLAYLISTS;
+            Cursor songsInPlaylistCursor = musicResolver.query(songsPlaylistUri, songsInPlaylistProjection, DatabaseContract.SongPlaylistTable.COLUMN_PLAYLIST_ID + " = " + defaultPlaylist,
+                    null, null);
+            if (songsInPlaylistCursor != null && songsInPlaylistCursor.moveToFirst()) {
+                //za svaki id pesme vraca se pesma iz baze i postavlja se u listu
+                do {
+                    Uri songUri = ContentUris.withAppendedId(SongProvider.CONTENT_URI_SONGS, songsInPlaylistCursor.getLong(0));
+                    Cursor songCursor = musicResolver.query(songUri, null, null, null, null);
+                    if (songCursor != null && songCursor.moveToFirst()) {
+                        SongBean song = new SongBean();
+                        song.setPathToFile(songCursor.getString(1));
+                        song.setTitle(songCursor.getString(2));
+                        song.setArtist(songCursor.getString(3));
+                        song.setAlbum(songCursor.getString(4));
+                        song.setYear(songCursor.getInt(5));
+                        listOfSongs.add(song);
+                    }
+                    songCursor.close();
+                } while (songsInPlaylistCursor.moveToNext());
             }
-            while (musicCursor.moveToNext());
+            songsInPlaylistCursor.close();
+
+            String[] playlistProjection = {DatabaseContract.PlaylistTable.COLUMN_NAME};
+            Cursor playlistCursor = musicResolver.query(PlaylistProvider.CONTENT_URI_PLAYLISTS, playlistProjection, DatabaseContract.PlaylistTable._ID + " = " + defaultPlaylist,
+                    null, null);
+            playlistCursor.moveToFirst();
+            DataHolder.setActivePlaylistName(playlistCursor.getString(0));
+            DataHolder.setActivePlaylistId(Long.parseLong(defaultPlaylist));
+            playlistCursor.close();
+        }else{
+            Uri songsUri = SongProvider.CONTENT_URI_SONGS;
+            Cursor musicCursor = musicResolver.query(songsUri, null, null, null, null);
+            if (musicCursor != null && musicCursor.moveToFirst()) {
+                do {
+                    SongBean song = new SongBean();
+                    song.setPathToFile(musicCursor.getString(1));
+                    song.setTitle(musicCursor.getString(2));
+                    song.setArtist(musicCursor.getString(3));
+                    song.setAlbum(musicCursor.getString(4));
+                    song.setYear(musicCursor.getInt(5));
+                    listOfSongs.add(song);
+                }
+                while (musicCursor.moveToNext());
+            }
+            musicCursor.close();
+
+            DataHolder.setActivePlaylistName(getResources().getString(R.string.all_songs));
+            DataHolder.setActivePlaylistId(-1);
         }
-        musicCursor.close();
 
         DataHolder.setSongsToPlay(listOfSongs);
     }
