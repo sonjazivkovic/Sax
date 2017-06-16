@@ -41,4 +41,5 @@
     <string name="playlist_add_to_ql">Додај на брзо бирање</string>
 
     <string name="song_title_is_unknown"> Непознат назив песме </string>
+    <string name="song_title_is_not_valid"> Извођач и назив песме нису валидни, попуните мета податке или промените назив фајла у форми Извођач - Име Песме </string>
 </resources>
