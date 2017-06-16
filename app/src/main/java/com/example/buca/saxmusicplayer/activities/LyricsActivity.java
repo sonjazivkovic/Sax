@@ -25,9 +25,6 @@ import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public class LyricsActivity extends AppCompatActivity {
 
-
-    private String API_URL = "http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?";
-
     private String songArtist;
     private String songTitle;
 
