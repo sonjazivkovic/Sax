@@ -85,11 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private  Uri playlistUri;
     private Cursor playlistCursor;
     private CustomGridCursorAdapter cgc;
-    private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
-    private ProgressDialog progressDialog;
-
-    private SettingsFragment sf;
-
+    private AlertDialog dialog;
 
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -201,27 +197,25 @@ public class MainActivity extends AppCompatActivity {
                         String defaultPlaylist = preferences.getString("default_playlist_preference", "none");
                         if(!defaultPlaylist.equals("none")) {
                             loadPlaylist(Long.parseLong(defaultPlaylist));
+                            drawerLayout.closeDrawer(Gravity.LEFT);
                         }
                         break;
                     case 2:
-                        playlistResolver = getContentResolver();
-                        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
-                        playlistCursor = playlistResolver.query(playlistUri, null, null, null, null);
-
+                        Cursor allPlaylistCursor = playlistResolver.query(playlistUri, null, null, null, null);
                         CharSequence[] entries;
                         final CharSequence[] entriValues;
 
-                        if(playlistCursor != null && playlistCursor.moveToFirst()){
-                            entries = new CharSequence[playlistCursor.getCount() + 1];
-                            entriValues = new CharSequence[playlistCursor.getCount() + 1];
+                        if(allPlaylistCursor != null && allPlaylistCursor.moveToFirst()){
+                            entries = new CharSequence[allPlaylistCursor.getCount() + 1];
+                            entriValues = new CharSequence[allPlaylistCursor.getCount() + 1];
                             entries[0] = getResources().getString(R.string.choose_playlist_default_string);
                             entriValues[0] = "none";
                             int i = 1;
                             do{
-                                entriValues[i] = Long.toString(playlistCursor.getLong(playlistCursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
-                                entries[i] = playlistCursor.getString(playlistCursor.getColumnIndex(DatabaseContract.PlaylistTable.COLUMN_NAME));
+                                entriValues[i] = Long.toString(allPlaylistCursor.getLong(allPlaylistCursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
+                                entries[i] = allPlaylistCursor.getString(allPlaylistCursor.getColumnIndex(DatabaseContract.PlaylistTable.COLUMN_NAME));
                                 i++;
-                            }while(playlistCursor.moveToNext());
+                            }while(allPlaylistCursor.moveToNext());
 
                         }else{
                             entries = new CharSequence[1];
@@ -229,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                             entries[0] = getResources().getString(R.string.choose_playlist_default_string);
                             entriValues[0] = "none";
                         }
-
+                        allPlaylistCursor.close();
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle(R.string.choose_playlist);
@@ -238,12 +232,14 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 // the user clicked on entries[which]
                                 if(!(entriValues[which]).equals("none")) {
-                                    loadPlaylist(which);
+                                    loadPlaylist(Long.parseLong(entriValues[which].toString()));
+                                    drawerLayout.closeDrawer(Gravity.LEFT);
                                 }
 
                             }
                         });
-                        builder.show();
+                        dialog = builder.create();
+                        dialog.show();
                         break;
                 }
             }
@@ -438,6 +434,8 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(uiUpdateReceiver);
         runnableHandler.removeCallbacks(updateSongTime);
         playlistCursor.close();
+        if(dialog != null && dialog.isShowing())
+            dialog.dismiss();
     }
 
 
@@ -503,7 +501,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPlaylistName(){
         TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
-        playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
+        String text = getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName();
+        playlistNameTV.setText(text);
     }
 
 
