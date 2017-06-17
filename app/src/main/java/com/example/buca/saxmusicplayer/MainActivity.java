@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        menuItems = new String[] { getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.choose_playlist), "Select Song from Playlist"};
+        menuItems = new String[] { getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.choose_playlist), getString(R.string.select_song)};
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuItems));
 
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                             i++;
                         }
                         AlertDialog.Builder builderSong = new AlertDialog.Builder(MainActivity.this);
-                        builderSong.setTitle(R.string.choose_playlist);
+                        builderSong.setTitle(R.string.select_song);
                         builderSong.setItems(entriesSong, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
