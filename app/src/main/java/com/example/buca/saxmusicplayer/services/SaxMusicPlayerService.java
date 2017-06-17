@@ -304,6 +304,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
             intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
             intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
             sendBroadcast(intent);
+            createNotification(PlaybackStatus.PAUSED);
         }
     }
 
@@ -317,6 +318,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
             intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
             intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
             sendBroadcast(intent);
+            createNotification(PlaybackStatus.PAUSED);
         }
     }
 
