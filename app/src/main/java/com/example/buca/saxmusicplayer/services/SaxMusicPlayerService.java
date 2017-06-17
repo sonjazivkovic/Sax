@@ -387,6 +387,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
                         .setShowActionsInCompactView(0, 1, 2))
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText(DataHolder.getCurrentSong().getTitle())
+                .setColor(getResources().getColor(R.color.colorPrimary))
                 //playbackAction arument 3 oznacava pustanje prethodne pesme
                 .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
                 .addAction(notificationAction, "pause", play_pauseAction)

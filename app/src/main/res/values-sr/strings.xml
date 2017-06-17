@@ -58,4 +58,7 @@
     <string name="choose_playlist">Изаберите плејлисту</string>
 
     <string name="choose_playlist_default_string">Ниједна</string>
+    <string name="song_artist">"Извођач: "</string>
+    <string name="song_name_details">"Назив песме: "</string>
+    <string name="song_rank">"Ранг песме: "</string>
 </resources>

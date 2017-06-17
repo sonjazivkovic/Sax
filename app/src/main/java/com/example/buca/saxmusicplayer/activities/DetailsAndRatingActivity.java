@@ -78,7 +78,7 @@ public class DetailsAndRatingActivity extends AppCompatActivity {
             String artist = StringUtils.substringBetween(response, "<LyricArtist>", "</LyricArtist>");
             String song = StringUtils.substringBetween(response, "<LyricSong>", "</LyricSong>");
 
-            String details = ("Song name: " + song + "\n" + "Song artist: " + artist + "\n" + "Song rank:" + songRank + "\n");
+            String details = (getResources().getString(R.string.song_name_details) + song + "\n\n" + getResources().getString(R.string.song_artist) + artist + "\n\n" + getResources().getString(R.string.song_rank) + songRank + "\n");
 
             tvDetails.setText(details);
 
