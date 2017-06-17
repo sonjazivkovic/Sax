@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                             i++;
                         }
                         AlertDialog.Builder builderSong = new AlertDialog.Builder(MainActivity.this);
-                        builderSong.setTitle(R.string.choose_playlist);
+                        builderSong.setTitle(R.string.select_song);
                         builderSong.setItems(entriesSong, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
