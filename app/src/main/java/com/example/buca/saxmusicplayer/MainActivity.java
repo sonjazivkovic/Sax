@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         loadPlaylist(-1);
-                        Toast.makeText(MainActivity.this, getResources().getString(R.string.choose_all_songs), Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 1:
