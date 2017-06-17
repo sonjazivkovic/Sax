@@ -2,6 +2,7 @@ package com.example.buca.saxmusicplayer.adapters;
 import android.content.Context;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import com.example.buca.saxmusicplayer.util.DatabaseContract;
 
 public class CustomGridCursorAdapter extends ResourceCursorAdapter {
     private Context mContext;
+    TextView playlistImage;
 
     public CustomGridCursorAdapter(Context context, int layout, Cursor c, int flags) {
         super(context, layout, c, flags);
@@ -21,12 +23,11 @@ public class CustomGridCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView playlistName = (TextView)view.findViewById(R.id.grid_text);
+        TextView playlistName = (TextView)view.findViewById(R.id.grid_image);
         playlistName.setText(cursor.getString(cursor.getColumnIndex(DatabaseContract.PlaylistTable.COLUMN_NAME)));
 
-        final ImageView playlistImage = (ImageView)view.findViewById(R.id.grid_image);
-        playlistImage.setTag(cursor.getLong(cursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
-        playlistImage.setOnClickListener(new View.OnClickListener() {
+        playlistName.setTag(cursor.getLong(cursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
+        playlistName.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

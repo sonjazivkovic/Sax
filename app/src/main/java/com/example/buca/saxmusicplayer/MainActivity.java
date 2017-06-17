@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             }
             //isto i za dugme, moramo ovde proveriti zato sto pre ovoga ne postoji saxMusicPlayerService
             if(saxMusicPlayerService.isPlaying()) {
-                playPause.setImageResource(R.drawable.main_pause_icon);
+                playPause.setImageResource(R.drawable.pause);
             }
         }
 
@@ -120,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
             }
             if(intent.getBooleanExtra(Broadcast_SONG_PAUSE, false)){
                 runnableHandler.removeCallbacks(updateSongTime);
-                playPause.setImageResource(R.drawable.play);
+                playPause.setImageResource(R.drawable.play_song);
             }
             if(intent.getBooleanExtra(Broadcast_SONG_RESUME, false)){
                 initSeekBar(true);
-                playPause.setImageResource(R.drawable.main_pause_icon);
+                playPause.setImageResource(R.drawable.pause);
             }
             if(intent.getBooleanExtra(Broadcast_UPDATE_PLAYLIST_NAME, false)){
                 setPlaylistName();
@@ -416,6 +416,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPlaylistName(){
         TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
         playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
+
     }
 
     private class LongOperation extends AsyncTask<Long, Void, Long> {
