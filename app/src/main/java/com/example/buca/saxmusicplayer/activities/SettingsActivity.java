@@ -25,7 +25,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.example.buca.saxmusicplayer.MainActivity;
 import com.example.buca.saxmusicplayer.R;
@@ -35,6 +37,8 @@ import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 import com.example.buca.saxmusicplayer.util.DatabaseContract;
+
+import java.util.Locale;
 
 
 /**
@@ -100,14 +104,10 @@ public class SettingsActivity extends AppCompatActivity {
         scanDevice.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(preference.getContext(), android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(preference.getContext());
-                }
-                alertDialog = builder.setTitle(R.string.scan_device)
-                        .setMessage(R.string.long_operation)
+                AlertDialog.Builder builder = new AlertDialog.Builder(preference.getContext());
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title, null);
+                ((TextView)titleView.findViewById(R.id.dialog_title_text)).setText(R.string.scan_device);
+                alertDialog = builder.setMessage(R.string.long_operation)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 new LongOperation().execute("scan_device");
@@ -117,7 +117,7 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setCustomTitle(titleView)
                         .create();
                 alertDialog.show();
                 return true;
@@ -128,14 +128,10 @@ public class SettingsActivity extends AppCompatActivity {
         cleanDevice.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(preference.getContext(), android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(preference.getContext());
-                }
-                alertDialog = builder.setTitle(R.string.clean_device)
-                        .setMessage(R.string.long_operation)
+                AlertDialog.Builder builder = new AlertDialog.Builder(preference.getContext());
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title, null);
+                ((TextView)titleView.findViewById(R.id.dialog_title_text)).setText(R.string.clean_device);
+                alertDialog = builder.setMessage(R.string.long_operation)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 new LongOperation().execute("clean_device");
@@ -145,7 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setCustomTitle(titleView)
                         .create();
                 alertDialog.show();
                 return true;

@@ -118,6 +118,7 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         playlistCursor.close();
+        lca.dismissDialog();
         super.onDestroy();
     }
 }

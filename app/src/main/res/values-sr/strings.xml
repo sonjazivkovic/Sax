@@ -36,7 +36,9 @@
     <string name="loading_splash_screen">Учитавам песме</string>
     <string name="loading_splash_screen_bit_more">Припремам плејер</string>
     <string name="song_title">Наслов Песме</string>
-    <string name="select_song">Изабери песму</string>
+    <string name="select_song">Изаберите песму</string>
+    <string name="delete_playlist">Брисање плејлисте</string>
+    <string name="are_you_sure">Да ли сте сигурни да желите да наставите?</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>

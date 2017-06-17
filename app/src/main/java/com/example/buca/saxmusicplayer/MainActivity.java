@@ -223,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
                         allPlaylistCursor.close();
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle(R.string.choose_playlist);
+                        View titleView = getLayoutInflater().inflate(R.layout.dialog_title, null);
+                        ((TextView)titleView.findViewById(R.id.dialog_title_text)).setText(R.string.choose_playlist);
                         builder.setItems(entries, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                             }
-                        });
+                        }).setCustomTitle(titleView);
                         dialog = builder.create();
                         dialog.show();
                         break;
@@ -246,8 +247,9 @@ public class MainActivity extends AppCompatActivity {
                             entriesSong[i] = sb.getTitle();
                             i++;
                         }
+                        View titleViewSong = getLayoutInflater().inflate(R.layout.dialog_title, null);
+                        ((TextView)titleViewSong.findViewById(R.id.dialog_title_text)).setText(R.string.select_song);
                         AlertDialog.Builder builderSong = new AlertDialog.Builder(MainActivity.this);
-                        builderSong.setTitle(R.string.select_song);
                         builderSong.setItems(entriesSong, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -258,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                             }
-                        });
+                        }).setCustomTitle(titleViewSong);
                         dialog = builderSong.create();
                         dialog.show();
                         break;
