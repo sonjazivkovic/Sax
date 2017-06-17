@@ -502,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void repeatSong() {
         repeat = (ImageButton)findViewById(R.id.repeat);
-        if (!DataHolder.isRepeated) {
+        if (!DataHolder.isRepeated()) {
             repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
         }
         else {
@@ -512,12 +512,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if (!DataHolder.isRepeated) {
-                    DataHolder.isRepeated = true;
+                if (!DataHolder.isRepeated()) {
+                    DataHolder.setIsRepeated(true);
                     repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
                 }
                 else {
-                    DataHolder.isRepeated = false;
+                    DataHolder.setIsRepeated(false);
                     repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
                 }
             }
@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void shufflePlaylist() {
         shuffle = (ImageButton)findViewById(R.id.shuffle);
-        if (!DataHolder.isShuffled) {
+        if (!DataHolder.isShuffled()) {
             shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
         }
         else {
@@ -536,12 +536,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if (!DataHolder.isShuffled) {
-                    DataHolder.isShuffled = true;
+                if (!DataHolder.isShuffled()) {
+                    DataHolder.setIsShuffled(true);
                     shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
                 }
                 else {
-                    DataHolder.isShuffled = false;
+                    DataHolder.setIsShuffled(false);
                     shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
                 }
             }

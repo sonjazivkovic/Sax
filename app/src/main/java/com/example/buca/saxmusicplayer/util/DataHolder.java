@@ -19,8 +19,25 @@ public class DataHolder {
 
     private static long activePlaylistId;
     private static String activePlaylistName;
-    public static boolean isRepeated;
-    public static boolean isShuffled;
+
+    public static boolean isRepeated() {
+        return isRepeated;
+    }
+
+    public static void setIsRepeated(boolean isRepeated) {
+        DataHolder.isRepeated = isRepeated;
+    }
+
+    public static boolean isShuffled() {
+        return isShuffled;
+    }
+
+    public static void setIsShuffled(boolean isShuffled) {
+        DataHolder.isShuffled = isShuffled;
+    }
+
+    private static boolean isRepeated;
+    private static boolean isShuffled;
 
 
     public static ArrayList<SongBean> getSongsToPlay(){

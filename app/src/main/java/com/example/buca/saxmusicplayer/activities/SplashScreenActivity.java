@@ -49,8 +49,8 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.splash);
         checkPermissions();
 
-        DataHolder.isRepeated = false;
-        DataHolder.isShuffled = false;
+        DataHolder.setIsRepeated(false);
+        DataHolder.setIsShuffled(false);
 
         progress = (TextView)findViewById(R.id.progress_bar_text);
         progress.setText(getString(R.string.loading_splash_screen));
