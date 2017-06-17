@@ -85,8 +85,9 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(playlistName.getText() != null && !playlistName.getText().toString().equals("")) {
-                    String selection = DatabaseContract.PlaylistTable.COLUMN_NAME + " = '" + playlistName.getText().toString() + "'";
-                    playlistCursor = playlistResolver.query(playlistUri, null, selection, null, null);
+                    String selection = DatabaseContract.PlaylistTable.COLUMN_NAME + " LIKE ?";
+                    String[] selectionArgs = {"%"+playlistName.getText().toString()+"%"};
+                    playlistCursor = playlistResolver.query(playlistUri, null, selection, selectionArgs, null);
                     lca.changeCursor(playlistCursor);
                 }
             }

@@ -496,7 +496,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPlaylistName(){
         TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
-        String text = getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName();
+        String text;
+        if(DataHolder.getActivePlaylistName().equals("all_songs")){
+            text = getString(R.string.active_playlist_name) + getString(R.string.all_songs);
+        }else{
+            text = getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName();
+        }
+
         playlistNameTV.setText(text);
     }
 

@@ -63,7 +63,7 @@ public class SplashScreenActivity extends Activity {
             editor.putBoolean(getString(R.string.initial_scan_done_key), true);
             editor.commit();
             DataHolder.setActivePlaylistId(-1);
-            DataHolder.setActivePlaylistName(getResources().getString(R.string.all_songs));
+            DataHolder.setActivePlaylistName("all_songs");
         }else{
             loadSongsFromDatabase();
         }
@@ -170,7 +170,7 @@ public class SplashScreenActivity extends Activity {
             }
             musicCursor.close();
 
-            DataHolder.setActivePlaylistName(getResources().getString(R.string.all_songs));
+            DataHolder.setActivePlaylistName("all_songs");
             DataHolder.setActivePlaylistId(-1);
         }
 
