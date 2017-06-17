@@ -439,9 +439,6 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         mediaSession.setActive(true);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-        /*Ovde bi trebalo da se ispisuju podaci o pesmi na notifikaciji*/
-       // updateSongInfo();
-
     }
 
     /*U zavisnoti od toga koji smo argument prosledili, ovde odredjujemo koja ce se akcija dogoditi pritiskom
@@ -554,7 +551,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
             }
             songCursor.close();
 
-            DataHolder.setActivePlaylistName(getResources().getString(R.string.all_songs));
+            DataHolder.setActivePlaylistName("all_songs");
         }
         DataHolder.setSongsToPlay(listOfSongs);
         DataHolder.setCurrentSongPosition(0);

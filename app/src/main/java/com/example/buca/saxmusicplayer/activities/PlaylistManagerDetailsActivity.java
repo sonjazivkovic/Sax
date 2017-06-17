@@ -96,7 +96,8 @@ public class PlaylistManagerDetailsActivity extends AppCompatActivity {
         playlistDescription.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT){
+                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_SEND){
                     ContentValues cv = new ContentValues();
                     cv.put(DatabaseContract.PlaylistTable.COLUMN_DESCRIPTION, v.getText().toString());
                     resolver.update(playlistUri, cv, null, null);
