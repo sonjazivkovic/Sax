@@ -358,11 +358,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        createPlaylistCursor();
-        cgc = new CustomGridCursorAdapter(this, R.layout.grid_single, playlistCursor, 0);
-        grid=(GridView)findViewById(R.id.gridview);
-        grid.setAdapter(cgc);
+        initializeGrid();
         if(!serviceBound) {
             Intent playMusicIntent = new Intent(this, SaxMusicPlayerService.class);
             startService(playMusicIntent);
@@ -371,11 +367,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createPlaylistCursor() {
+    public void initializeGrid() {
         playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
         playlistResolver = getContentResolver();
         String where = DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL + " = 1";
         playlistCursor = playlistResolver.query(playlistUri, null, where, null, null);
+        cgc = new CustomGridCursorAdapter(this, R.layout.grid_single, playlistCursor, 0);
+        grid=(GridView)findViewById(R.id.gridview);
+        grid.setAdapter(cgc);
     }
 
     @Override
@@ -583,6 +582,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Long playlistID) {
+            initializeGrid();
             saxMusicPlayerService.onPostExecuteLoadNewPlaylist();
             progressDialog.dismiss();
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
