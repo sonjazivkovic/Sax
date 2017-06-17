@@ -3,6 +3,7 @@ package com.example.buca.saxmusicplayer.activities;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -75,6 +78,15 @@ public class PlaylistManagerDetailsActivity extends AppCompatActivity {
         SongForPlaylistCursorAdapter sfpca = new SongForPlaylistCursorAdapter(this, R.layout.playlist_manager_song_list_item, songsCursor, 0, playlistID);
         ListView listView = (ListView) findViewById(R.id.playlist_songs_list_view);
         listView.setAdapter(sfpca);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                //hide KB
+                InputMethodManager imm =  (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(playlistDescription.getWindowToken(), 0);
+            }
+
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) { }
+        });
 
         visibleInQLSwitch.setOnClickListener(new View.OnClickListener() {
             @Override

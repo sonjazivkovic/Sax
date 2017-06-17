@@ -45,14 +45,14 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@android:drawable/ic_notification_clear_all"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="0"/>
             <Button
                 android:id="@+id/add_new_playlist_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/addd"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="0"/>
         </LinearLayout>
 

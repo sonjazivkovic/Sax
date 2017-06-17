@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +40,8 @@ public class PlaylistCursorAdapter extends ResourceCursorAdapter {
         TextView description = (TextView) view.findViewById(R.id.text_item_view_description);
         description.setText(cursor.getString(cursor.getColumnIndex(DatabaseContract.PlaylistTable.COLUMN_DESCRIPTION)));
 
-        Button edit = (Button) view.findViewById(R.id.edit_playlist_button);
-        Button delete = (Button) view.findViewById(R.id.remove_playlist_button);
+        ImageButton edit = (ImageButton) view.findViewById(R.id.edit_playlist_button);
+        ImageButton delete = (ImageButton) view.findViewById(R.id.remove_playlist_button);
         edit.setTag(cursor.getLong(cursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
         delete.setTag(cursor.getLong(cursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
 

@@ -6,4 +6,5 @@
     <color name="black">#000000</color>
     <color name="colorTest">#FBD1BF</color>
     <color name="colorLightBlue">#A3D5FA</color>
+    <color name="gray">#8C8C8C</color>
 </resources>
