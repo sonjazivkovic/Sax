@@ -85,14 +85,11 @@ public class MainActivity extends AppCompatActivity {
     private  Uri playlistUri;
     private Cursor playlistCursor;
     private CustomGridCursorAdapter cgc;
-<<<<<<< HEAD
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
     private ProgressDialog progressDialog;
 
     private SettingsFragment sf;
-=======
 
->>>>>>> 48e489000833442d503dbf88570fa9e3a43599cc
 
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -200,6 +197,11 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 1:
+                        SharedPreferences preferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+                        String defaultPlaylist = preferences.getString("default_playlist_preference", "none");
+                        if(!defaultPlaylist.equals("none")) {
+                            loadPlaylist(Long.parseLong(defaultPlaylist));
+                        }
                         break;
                     case 2:
                         playlistResolver = getContentResolver();
@@ -235,11 +237,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // the user clicked on entries[which]
-
-                                Toast.makeText(MainActivity.this,
-                                        String.valueOf("Choosed playlist: " + DataHolder.getActivePlaylistName()),
-                                        Toast.LENGTH_SHORT).show();
-                                loadPlaylist(which);
+                                if(!(entriValues[which]).equals("none")) {
+                                    loadPlaylist(which);
+                                }
 
                             }
                         });

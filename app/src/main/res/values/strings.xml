@@ -58,6 +58,5 @@
     <string name="rate_result"> Stars given: </string>
 
     <string name="choose_playlist">Choose Playlist</string>
-    <string name="choose_playlist_summary">Select your default playlist</string>
     <string name="choose_playlist_default_string">None</string>
 </resources>
