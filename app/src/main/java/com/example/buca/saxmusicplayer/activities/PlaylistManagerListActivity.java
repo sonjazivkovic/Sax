@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,9 +35,9 @@ import java.util.Locale;
 public class PlaylistManagerListActivity extends AppCompatActivity {
     private ContentResolver playlistResolver;
     private Uri playlistUri;
-    private Button addPlaylist;
-    private Button searchPlaylist;
-    private Button cleanSearchPlaylist;
+    private ImageButton addPlaylist;
+    private ImageButton searchPlaylist;
+    private ImageButton cleanSearchPlaylist;
     private EditText playlistName;
     private PlaylistCursorAdapter lca;
     private Cursor playlistCursor;
@@ -72,9 +74,9 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
         });
 
         playlistName = (EditText) findViewById(R.id.playlist_list_view_playlist_name);
-        addPlaylist = (Button) findViewById(R.id.add_new_playlist_button);
-        searchPlaylist = (Button) findViewById(R.id.search_playlist_button);
-        cleanSearchPlaylist = (Button) findViewById(R.id.clean_search_playlist_button);
+        addPlaylist = (ImageButton) findViewById(R.id.add_new_playlist_button);
+        searchPlaylist = (ImageButton) findViewById(R.id.search_playlist_button);
+        cleanSearchPlaylist = (ImageButton) findViewById(R.id.clean_search_playlist_button);
         addPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -40,7 +40,7 @@
         android:layout_centerVertical="true"
         android:tint="@color/gray"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="6dp"
         app:srcCompat="@drawable/delete"/>
 
     <ImageButton
@@ -51,7 +51,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:layout_centerVertical="true"
         android:tint="@color/gray"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         app:srcCompat="@drawable/edit"/>
 
 </RelativeLayout>
