@@ -23,11 +23,14 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +42,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -71,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton playPause;
     private ImageButton playNextSong;
     private ImageButton playPrevSong;
+    private ImageButton repeat;
+    private ImageButton shuffle;
+    private GridView grid;
+    private boolean isRepeated = false;
+    private boolean isShuffled = false;
 
     private ContentResolver playlistResolver;
     private  Uri playlistUri;
@@ -80,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
 
-    private GridView grid;
+
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -229,6 +238,39 @@ public class MainActivity extends AppCompatActivity {
                 saxMusicPlayerService.backForward();
             }
         });
+        repeat = (ImageButton)findViewById(R.id.repeat);
+        repeat.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!isRepeated) {
+                    isRepeated = true;
+                    repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
+                }
+                else {
+                    isRepeated = false;
+                    repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
+                }
+
+            }
+        });
+        shuffle = (ImageButton)findViewById(R.id.shuffle);
+        shuffle.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!isShuffled) {
+                    isShuffled = true;
+                    shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
+                }
+                else {
+                    isShuffled = false;
+                    shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
+                }
+
+            }
+        });
+
 
         /*provera da li postoji pesma u plejeru, ukoliko ne postoji onemoguciti kornisniku da klikce po seekbaru*/
         if(DataHolder.getResetAndPrepare())
@@ -416,8 +458,8 @@ public class MainActivity extends AppCompatActivity {
     private void setPlaylistName(){
         TextView playlistNameTV = (TextView)findViewById(R.id.playlist_name);
         playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
-
     }
+
 
     private class LongOperation extends AsyncTask<Long, Void, Long> {
 

@@ -11,5 +11,5 @@
     <stroke
         android:width="2dip"
         android:color="@color/colorPrimary" />
-    <gradient android:endColor="@color/colorPrimary"></gradient>
+    <gradient android:endColor="@color/colorLightBlue"></gradient>
 </shape>

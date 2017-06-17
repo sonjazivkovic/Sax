@@ -79,7 +79,7 @@
                         android:id="@+id/repeat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="20dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/repeat"/>
@@ -93,9 +93,10 @@
                         android:text="@string/song_name" />
 
                     <ImageButton
+                        android:id="@+id/shuffle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="20dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/shuffle"/>
