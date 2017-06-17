@@ -48,7 +48,7 @@ public class DetailsAndRatingActivity extends AppCompatActivity {
 
         String songTitle = DataHolder.getCurrentSong().getTitle();
 
-        if(songArtist.equals("<unknown>") && !songTitle.equals("<unknown>")){
+        if(songArtist.equals("<unknown>") || songTitle.equals("<unknown>")){
             if(songTitle.contains("-")) {
                 String parts[] = songTitle.split("-");
 

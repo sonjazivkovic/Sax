@@ -1,21 +1,11 @@
 package com.example.buca.saxmusicplayer;
 
-import com.example.buca.saxmusicplayer.activities.AboutActivity;
-import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
-import com.example.buca.saxmusicplayer.activities.LyricsActivity;
-import com.example.buca.saxmusicplayer.activities.SettingsActivity;
-import com.example.buca.saxmusicplayer.adapters.CustomGridCursorAdapter;
-import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
-import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
-import com.example.buca.saxmusicplayer.util.DataHolder;
-import com.example.buca.saxmusicplayer.util.DatabaseContract;
-import com.example.buca.saxmusicplayer.util.MathUtil;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -23,8 +13,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,6 +21,7 @@ import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -42,13 +31,24 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.buca.saxmusicplayer.activities.AboutActivity;
+import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;
+import com.example.buca.saxmusicplayer.activities.LyricsActivity;
+import com.example.buca.saxmusicplayer.activities.SettingsActivity;
+import com.example.buca.saxmusicplayer.activities.SettingsActivity.SettingsFragment;
+import com.example.buca.saxmusicplayer.adapters.CustomGridCursorAdapter;
+import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
+import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
+import com.example.buca.saxmusicplayer.util.DataHolder;
+import com.example.buca.saxmusicplayer.util.DatabaseContract;
+import com.example.buca.saxmusicplayer.util.MathUtil;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
     private ProgressDialog progressDialog;
 
-
+    private SettingsFragment sf;
 
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -198,6 +198,48 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         break;
                     case 2:
+                        playlistResolver = getContentResolver();
+                        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
+                        playlistCursor = playlistResolver.query(playlistUri, null, null, null, null);
+
+                        CharSequence[] entries;
+                        final CharSequence[] entriValues;
+
+                        if(playlistCursor != null && playlistCursor.moveToFirst()){
+                            entries = new CharSequence[playlistCursor.getCount() + 1];
+                            entriValues = new CharSequence[playlistCursor.getCount() + 1];
+                            entries[0] = getResources().getString(R.string.choose_playlist_default_string);
+                            entriValues[0] = "none";
+                            int i = 1;
+                            do{
+                                entriValues[i] = Long.toString(playlistCursor.getLong(playlistCursor.getColumnIndex(DatabaseContract.PlaylistTable._ID)));
+                                entries[i] = playlistCursor.getString(playlistCursor.getColumnIndex(DatabaseContract.PlaylistTable.COLUMN_NAME));
+                                i++;
+                            }while(playlistCursor.moveToNext());
+
+                        }else{
+                            entries = new CharSequence[1];
+                            entriValues = new CharSequence[1];
+                            entries[0] = getResources().getString(R.string.choose_playlist_default_string);
+                            entriValues[0] = "none";
+                        }
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle(R.string.choose_playlist);
+                        builder.setItems(entries, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // the user clicked on entries[which]
+
+                                Toast.makeText(MainActivity.this,
+                                        String.valueOf("Choosed playlist: " + DataHolder.getActivePlaylistName()),
+                                        Toast.LENGTH_SHORT).show();
+                                loadPlaylist(which);
+
+                            }
+                        });
+                        builder.show();
                         break;
                 }
             }
