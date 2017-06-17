@@ -85,10 +85,14 @@ public class MainActivity extends AppCompatActivity {
     private  Uri playlistUri;
     private Cursor playlistCursor;
     private CustomGridCursorAdapter cgc;
+<<<<<<< HEAD
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
     private ProgressDialog progressDialog;
 
     private SettingsFragment sf;
+=======
+
+>>>>>>> 48e489000833442d503dbf88570fa9e3a43599cc
 
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -523,7 +527,14 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.show();
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            //privremeno disablujemo rotaciju
+            int currentOrientation = getResources().getConfiguration().orientation;
+            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+            }
+            else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+            }
             saxMusicPlayerService.onPreExecuteLoadNewPlaylist();
         }
 
