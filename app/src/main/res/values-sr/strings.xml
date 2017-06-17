@@ -11,7 +11,7 @@
     <string name="lyrics">Текст</string>
     <string name="playlist_manager">Управљање плејлистама</string>
     <string name="playlist_manager_summary">Управљај својим плејлистама</string>
-    <string name="scan_device">Скенирање уређаја</string>
+    <string name="scan_device">Скенирајте уређај</string>
     <string name="scan_device_summary">Уколико сте додали нове песме у екстерну меморију телефона, покрените ову опцију да пронађете нове песме.</string>
     <string name="settings">Подешавања</string>
     <string name="welcome_text">Добродошли у Sax Музички плејер</string>
@@ -22,7 +22,7 @@
     <string name="read_storage_phone_denied">Читање екстерне меморије и стања телефона забрањено</string>
     <string name="cant_delete_active_playlist">Не можете обрисати активну плејлисту. Молимо пустите другу плејлисту и пробајте поново.</string>
     <string name="cant_add_rem_song_active_playlist">Не можете додавати или брисати песме из активне плејлисте. Молимо пустите другу плејлисту и пробајте поново.</string>
-    <string name="clean_device">Чишћење песама</string>
+    <string name="clean_device">Очистите неактивне песме</string>
     <string name="clean_device_summary">Уколико сте обрисали неке песме из екстерне меморије телефона, покрените ову опцију да обришете те песме из плејлисти.</string>
     <string name="long_operation">Ова операција може потрајати. Да ли сте сигурни да желите да наставите?</string>
     <string name="yes">Да</string>
@@ -33,9 +33,10 @@
     <string name="default_playlist_default_string">Ниједна</string>
     <string name="active_playlist_name">Плејлиста коју слушате:\u0020</string>
     <string name="choose_all_songs">Све песме су учитане</string>
-    <string name="loading_splash_screen">Учитавање песама</string>
-    <string name="loading_splash_screen_bit_more">Припремање плејера</string>
+    <string name="loading_splash_screen">Учитавам песме</string>
+    <string name="loading_splash_screen_bit_more">Припремам плејер</string>
     <string name="song_title">Наслов Песме</string>
+    <string name="select_song">Изабери песму</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>
@@ -49,7 +50,7 @@
 
     <string name="song_title_is_unknown"> Непознат назив песме </string>
     <string name="song_title_is_not_valid"> Извођач и назив песме нису валидни, попуните мета податке или промените назив фајла у форми Извођач - Име Песме </string>
-    <string name="album_cover"> Album slika pesme </string>
+    <string name="album_cover"> Омот албума </string>
 
     <string name="rate_app"> Оцените апликацију </string>
     <string name="rate_result"> Број звездица: </string>

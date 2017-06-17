@@ -328,6 +328,20 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
         resume();
     }
 
+    public void loadSpecificSong(int newSongPosition){
+        DataHolder.setCurrentSongPosition(newSongPosition);
+        DataHolder.setResetAndPrepare(true);
+        if(player.isPlaying())
+            play();
+        else{
+            Intent intent = new Intent(MainActivity.Broadcast_UPDATE_UI_MAIN_ACTIVITY);
+            intent.putExtra(MainActivity.Broadcast_RESET_SEEK_BAR, true);
+            intent.putExtra(MainActivity.Broadcast_UPDATE_SONG_INFO, true);
+            sendBroadcast(intent);
+            createNotification(PlaybackStatus.PAUSED);
+        }
+    }
+
     public int getDuration(){
         if(DataHolder.getResetAndPrepare())
             return -1;

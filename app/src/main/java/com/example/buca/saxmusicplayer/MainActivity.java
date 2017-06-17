@@ -44,6 +44,7 @@ import com.example.buca.saxmusicplayer.activities.LyricsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity;
 import com.example.buca.saxmusicplayer.activities.SettingsActivity.SettingsFragment;
 import com.example.buca.saxmusicplayer.adapters.CustomGridCursorAdapter;
+import com.example.buca.saxmusicplayer.beans.SongBean;
 import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.services.SaxMusicPlayerService;
 import com.example.buca.saxmusicplayer.util.DataHolder;
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        menuItems = new String[] { getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.choose_playlist) };
+        menuItems = new String[] { getString(R.string.all_songs), getString(R.string.default_playlist), getString(R.string.choose_playlist), "Select Song from Playlist"};
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuItems));
 
@@ -236,6 +237,30 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         dialog = builder.create();
+                        dialog.show();
+                        break;
+                    case 3:
+                        CharSequence[] entriesSong = new CharSequence[DataHolder.getSongsToPlay().size() + 1];
+                        entriesSong[0] = getResources().getString(R.string.choose_playlist_default_string);
+                        int i = 1;
+                        for(SongBean sb : DataHolder.getSongsToPlay()){
+                            entriesSong[i] = sb.getTitle();
+                            i++;
+                        }
+                        AlertDialog.Builder builderSong = new AlertDialog.Builder(MainActivity.this);
+                        builderSong.setTitle(R.string.choose_playlist);
+                        builderSong.setItems(entriesSong, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // the user clicked on entries[which]
+                                if(which != 0) {
+                                    saxMusicPlayerService.loadSpecificSong(which-1);
+                                    drawerLayout.closeDrawer(Gravity.LEFT);
+                                }
+
+                            }
+                        });
+                        dialog = builderSong.create();
                         dialog.show();
                         break;
                 }
