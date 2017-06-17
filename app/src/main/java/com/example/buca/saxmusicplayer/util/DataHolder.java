@@ -6,6 +6,7 @@ import com.example.buca.saxmusicplayer.R;
 import com.example.buca.saxmusicplayer.beans.SongBean;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Stefan on 31/05/2017.
@@ -20,6 +21,7 @@ public class DataHolder {
     private static String activePlaylistName;
     public static boolean isRepeated;
     public static boolean isShuffled;
+
 
     public static ArrayList<SongBean> getSongsToPlay(){
         return songsToPlay;
@@ -36,17 +38,31 @@ public class DataHolder {
     }
 
     public static void nextSong(){
-        if(songPosition < songsToPlay.size() - 1)
-            songPosition++;
-        else if(songPosition == songsToPlay.size() - 1)
-            songPosition = 0;
+        Random random = new Random();
+        if (isRepeated)
+            songPosition = songPosition;
+        else if (isShuffled)
+            songPosition = random.nextInt(songsToPlay.size());
+        else {
+            if(songPosition < songsToPlay.size() - 1)
+                songPosition++;
+            else if(songPosition == songsToPlay.size() - 1)
+                songPosition = 0;
+        }
     }
 
     public static void previousSong(){
-        if(songPosition > 0)
-            songPosition--;
-        else if(songPosition == 0)
-            songPosition = songsToPlay.size() - 1;
+        Random random = new Random();
+        if (isRepeated)
+            songPosition = songPosition;
+        else if (isShuffled)
+            songPosition = random.nextInt(songsToPlay.size());
+        else {
+            if(songPosition > 0)
+                songPosition--;
+            else if(songPosition == 0)
+                songPosition = songsToPlay.size() - 1;
+        }
     }
 
     public static SongBean getCurrentSong(){
