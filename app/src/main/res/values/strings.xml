@@ -59,7 +59,7 @@
     <string name="about_app_text">Sax is the best open source music player in the world created by 3 students of FTN in Novi Sad. Sonja, Stefan and Stojan.</string>
 
     <string name="song_name"> </string>
-    <string name="song_title_is_unknown"> Song lyrics unknown </string>
+    <string name="song_title_is_unknown"> Song title unknown </string>
     <string name="song_title_is_not_valid"> Song artist and title is invalid, fill metadata or change file name in form of Artist - Song Name </string>
     <string name="album_cover"> Song album cover </string>
 

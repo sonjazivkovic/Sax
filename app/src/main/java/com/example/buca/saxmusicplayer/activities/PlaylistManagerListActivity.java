@@ -113,11 +113,9 @@ public class PlaylistManagerListActivity extends AppCompatActivity {
         cleanSearchPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(playlistName.getText() != null && !playlistName.getText().toString().equals("")) {
                     playlistName.setText("");
                     playlistCursor = playlistResolver.query(playlistUri, null, null, null, null);
                     lca.changeCursor(playlistCursor);
-                }
             }
         });
     }
