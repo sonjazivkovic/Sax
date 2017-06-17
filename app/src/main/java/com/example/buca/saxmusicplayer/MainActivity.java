@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton repeat;
     private ImageButton shuffle;
     private GridView grid;
-    private boolean isRepeated = false;
-    private boolean isShuffled = false;
+
 
     private ContentResolver playlistResolver;
     private  Uri playlistUri;
@@ -163,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
         changeLang();
         setContentView(R.layout.activity_main);
 
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
@@ -238,39 +235,9 @@ public class MainActivity extends AppCompatActivity {
                 saxMusicPlayerService.backForward();
             }
         });
-        repeat = (ImageButton)findViewById(R.id.repeat);
-        repeat.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                if (!isRepeated) {
-                    isRepeated = true;
-                    repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
-                }
-                else {
-                    isRepeated = false;
-                    repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
-                }
-
-            }
-        });
-        shuffle = (ImageButton)findViewById(R.id.shuffle);
-        shuffle.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (!isShuffled) {
-                    isShuffled = true;
-                    shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
-                }
-                else {
-                    isShuffled = false;
-                    shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
-                }
-
-            }
-        });
-
+        repeatSong();
+        shufflePlaylist();
 
         /*provera da li postoji pesma u plejeru, ukoliko ne postoji onemoguciti kornisniku da klikce po seekbaru*/
         if(DataHolder.getResetAndPrepare())
@@ -324,11 +291,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
-        playlistResolver = getContentResolver();
-        String where = DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL + " = 1";
-        playlistCursor = playlistResolver.query(playlistUri, null, where, null, null);
 
+        createPlaylistCursor();
         cgc = new CustomGridCursorAdapter(this, R.layout.grid_single, playlistCursor, 0);
         grid=(GridView)findViewById(R.id.gridview);
         grid.setAdapter(cgc);
@@ -338,6 +302,13 @@ public class MainActivity extends AppCompatActivity {
             bindService(playMusicIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         }
+    }
+
+    public void createPlaylistCursor() {
+        playlistUri = PlaylistProvider.CONTENT_URI_PLAYLISTS;
+        playlistResolver = getContentResolver();
+        String where = DatabaseContract.PlaylistTable.COLUMN_VISIBLE_IN_QL + " = 1";
+        playlistCursor = playlistResolver.query(playlistUri, null, where, null, null);
     }
 
     @Override
@@ -460,6 +431,53 @@ public class MainActivity extends AppCompatActivity {
         playlistNameTV.setText(getResources().getString(R.string.active_playlist_name) + DataHolder.getActivePlaylistName());
     }
 
+    private void repeatSong() {
+        repeat = (ImageButton)findViewById(R.id.repeat);
+        if (!DataHolder.isRepeated) {
+            repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
+        }
+        else {
+            repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
+        }
+        repeat.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!DataHolder.isRepeated) {
+                    DataHolder.isRepeated = true;
+                    repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
+                }
+                else {
+                    DataHolder.isRepeated = false;
+                    repeat.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
+                }
+            }
+        });
+
+    }
+    private void shufflePlaylist() {
+        shuffle = (ImageButton)findViewById(R.id.shuffle);
+        if (!DataHolder.isShuffled) {
+            shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
+        }
+        else {
+            shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
+        }
+        shuffle.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!DataHolder.isShuffled) {
+                    DataHolder.isShuffled = true;
+                    shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorAccent));
+                }
+                else {
+                    DataHolder.isShuffled = false;
+                    shuffle.setColorFilter(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary));
+                }
+            }
+        });
+    }
 
     private class LongOperation extends AsyncTask<Long, Void, Long> {
 

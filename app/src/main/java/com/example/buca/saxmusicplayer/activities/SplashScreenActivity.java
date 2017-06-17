@@ -44,7 +44,8 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         checkPermissions();
-
+        DataHolder.isRepeated = false;
+        DataHolder.isShuffled = false;
         preferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         boolean initScanDone = preferences.getBoolean(getString(R.string.initial_scan_done_key), false);
         if(!initScanDone){

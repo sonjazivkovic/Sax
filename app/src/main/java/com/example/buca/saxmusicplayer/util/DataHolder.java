@@ -18,6 +18,8 @@ public class DataHolder {
 
     private static long activePlaylistId;
     private static String activePlaylistName;
+    public static boolean isRepeated;
+    public static boolean isShuffled;
 
     public static ArrayList<SongBean> getSongsToPlay(){
         return songsToPlay;
