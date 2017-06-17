@@ -36,6 +36,8 @@
         android:gravity="center"
         android:paddingBottom="32dp"
         android:paddingTop="16dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:text="Placeholder For Song Lyrics.\n Lorem ipsum dolor sit amet,\n consectetur adipiscing elit, sed do eiusmod\n tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud\n exercitation ullamco laboris nisi ut aliquip\n ex ea commodo consequat. Duis aute irure dolor\n in reprehenderit in voluptate velit esse cillum dolore\n eu fugiat nulla pariatur. Excepteur sint\n occaecat cupidatat non proident, sunt\n in culpa qui officia deserunt mollit anim id est laborum."
         android:textAlignment="center"
         android:textColor="@color/colorAccent" />

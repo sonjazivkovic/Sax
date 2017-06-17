@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/colorPrimaryDark">
+<LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -23,8 +26,8 @@
         android:gravity="center"
         android:paddingBottom="32dp"
         android:paddingTop="16dp"
-        android:text="@string/about_app_title"
-        android:textColor="@color/colorAccent"
+        android:textSize="30dp"
+        android:text="@string/app_name"
 
         />
 
@@ -43,36 +46,43 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="16dp"
-        android:paddingTop="32dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:paddingTop="32dp"
         android:text="@string/about_app_text"
-        android:textColor="@color/colorAccent"
 
         />
 
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:numStars="5"
+        android:indeterminateTint="@color/colorAccent"
+        android:progressTint="@color/colorAccent"
+        android:foregroundTint="@color/colorAccent"
+        android:rating="2.0"
+        android:stepSize="1.0" />
 
-            android:numStars="5"
-            android:rating="2.0"
-            android:stepSize="1.0" />
-
-        <Button
+    <Button
             android:id="@+id/btnSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
-            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorPrimary"
             android:text="@string/rate_app" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/lblResult"
@@ -86,9 +96,11 @@
             android:id="@+id/txtRatingValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+
+            android:text="2.0"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>
