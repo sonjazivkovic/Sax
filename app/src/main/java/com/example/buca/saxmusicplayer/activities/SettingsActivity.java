@@ -73,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeLang();
         setContentView(R.layout.settings);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
@@ -152,6 +153,16 @@ public class SettingsActivity extends AppCompatActivity {
         if(preferences.getBoolean(getString(R.string.user_should_run_cleaner), false)){
             cleanDevice.setIcon(android.R.drawable.ic_dialog_alert);
         }
+    }
+
+    public void changeLang() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        String languageToLoad = sp.getString("language_preference", "en"); // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
     @Override

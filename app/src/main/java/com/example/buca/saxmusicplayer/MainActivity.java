@@ -462,7 +462,6 @@ public class MainActivity extends AppCompatActivity {
         Locale.setDefault(locale);
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
     }
 
     private void resetSeekBar() {

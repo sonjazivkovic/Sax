@@ -1,5 +1,7 @@
 package com.example.buca.saxmusicplayer.activities;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.buca.saxmusicplayer.R;
+
+import java.util.Locale;
 
 /**
  * Created by stojan.mitric on 6/14/2017.
@@ -26,6 +30,7 @@ public class AboutActivity  extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeLang();
         setContentView(R.layout.about);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.about_toolbar);
@@ -76,5 +81,15 @@ public class AboutActivity  extends AppCompatActivity {
 
         });
 
+    }
+
+    public void changeLang() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        String languageToLoad = sp.getString("language_preference", "en"); // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 }

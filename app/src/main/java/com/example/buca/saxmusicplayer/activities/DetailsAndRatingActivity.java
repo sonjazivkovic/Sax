@@ -1,5 +1,7 @@
 package com.example.buca.saxmusicplayer.activities;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import com.example.buca.saxmusicplayer.util.DataHolder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URL;
+import java.util.Locale;
 
 /**
  * Created by Stefan on 04/05/2017.
@@ -29,6 +32,7 @@ public class DetailsAndRatingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeLang();
         setContentView(R.layout.details_and_rating);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.details_rating_toolbar);
@@ -94,5 +98,15 @@ public class DetailsAndRatingActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void changeLang() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        String languageToLoad = sp.getString("language_preference", "en"); // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 }

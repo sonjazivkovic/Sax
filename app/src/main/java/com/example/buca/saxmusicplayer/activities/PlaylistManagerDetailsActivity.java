@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +30,8 @@ import com.example.buca.saxmusicplayer.providers.PlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.util.DatabaseContract;
 
+import java.util.Locale;
+
 /**
  * Created by Stefan on 18/05/2017.
  */
@@ -45,6 +49,7 @@ public class PlaylistManagerDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeLang();
         setContentView(R.layout.playlist_manager_details);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.playlist_manager_details_toolbar);
@@ -125,5 +130,15 @@ public class PlaylistManagerDetailsActivity extends AppCompatActivity {
         playlistCursor.close();
         songsCursor.close();
         super.onDestroy();
+    }
+
+    public void changeLang() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        String languageToLoad = sp.getString("language_preference", "en"); // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 }

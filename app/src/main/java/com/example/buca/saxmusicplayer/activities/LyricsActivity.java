@@ -1,5 +1,7 @@
 package com.example.buca.saxmusicplayer.activities;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
@@ -14,6 +16,8 @@ import com.example.buca.saxmusicplayer.util.DataHolder;
 
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Locale;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.os.Build.VERSION_CODES.M;
@@ -33,6 +37,7 @@ public class LyricsActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        changeLang();
         setContentView(R.layout.lyrics);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.lyrics_toolbar);
@@ -92,5 +97,13 @@ public class LyricsActivity extends AppCompatActivity {
 
     }
 
-
+    public void changeLang() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        String languageToLoad = sp.getString("language_preference", "en"); // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
 }
