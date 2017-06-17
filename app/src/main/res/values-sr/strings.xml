@@ -35,6 +35,7 @@
     <string name="choose_all_songs">Све песме су учитане</string>
     <string name="loading_splash_screen">Учитавање песама</string>
     <string name="loading_splash_screen_bit_more">Припремање плејера</string>
+    <string name="song_title">Наслов Песме</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>
