@@ -33,6 +33,8 @@
     <string name="default_playlist_default_string">Ниједна</string>
     <string name="active_playlist_name">Плејлиста коју слушате:\u0020</string>
     <string name="choose_all_songs">Све песме су учитане</string>
+    <string name="loading_splash_screen">Учитавање песама</string>
+    <string name="loading_splash_screen_bit_more">Припремање плејера</string>
 
     <string name="about_app">О апликацији</string>
     <string name="about_app_title">Sax</string>

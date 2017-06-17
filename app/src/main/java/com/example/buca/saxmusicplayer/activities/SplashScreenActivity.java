@@ -16,6 +16,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.buca.saxmusicplayer.MainActivity;
@@ -26,6 +27,8 @@ import com.example.buca.saxmusicplayer.providers.SongPlaylistProvider;
 import com.example.buca.saxmusicplayer.providers.SongProvider;
 import com.example.buca.saxmusicplayer.util.DataHolder;
 import com.example.buca.saxmusicplayer.util.DatabaseContract;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -38,13 +41,15 @@ public class SplashScreenActivity extends Activity {
     private static int SPLASH_DISPLAY_LENGTH = 3000;
     private SharedPreferences preferences;
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE_PHONE = 123;
+    private TextView progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         checkPermissions();
-
+        progress = (TextView)findViewById(R.id.progress_bar_text);
+        progress.setText(getString(R.string.loading_splash_screen));
         preferences = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         boolean initScanDone = preferences.getBoolean(getString(R.string.initial_scan_done_key), false);
         if(!initScanDone){
@@ -53,14 +58,17 @@ public class SplashScreenActivity extends Activity {
             editor.putBoolean(getString(R.string.initial_scan_done_key), true);
             editor.commit();
             DataHolder.setActivePlaylistId(-1);
+            DataHolder.setActivePlaylistName(getResources().getString(R.string.all_songs));
         }else{
             loadSongsFromDatabase();
         }
         DataHolder.setCurrentSongPosition(0);
         DataHolder.setResetAndPrepare(true);
 
+
         new Handler().postDelayed(new Runnable() {
             public void run() {
+                progress.setText(getString(R.string.loading_splash_screen_bit_more));
                 startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
                 finish();
             }
