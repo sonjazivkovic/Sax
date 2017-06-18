@@ -36,7 +36,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.buca.saxmusicplayer.activities.AboutActivity;
 import com.example.buca.saxmusicplayer.activities.DetailsAndRatingActivity;

@@ -476,6 +476,7 @@ public class SaxMusicPlayerService extends Service implements SensorEventListene
             if (this.isPlaying()){
                 this.pause();
                 vibrate(300);
+                Toast.makeText(this, getResources().getString(R.string.sensor), Toast.LENGTH_SHORT).show();
             }
         }
 

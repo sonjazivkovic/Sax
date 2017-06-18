@@ -68,4 +68,5 @@
 
     <string name="choose_playlist">Choose Playlist</string>
     <string name="choose_playlist_default_string">None</string>
+    <string name="sensor">You rotated a device screen to the bottom so the player has paused a song</string>
 </resources>
